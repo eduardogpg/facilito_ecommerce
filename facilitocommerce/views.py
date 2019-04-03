@@ -1,6 +1,7 @@
 from django.shortcuts import render
 #from django.http import HttpResponse
 #return HttpResponse('Hola mundo')
+from .forms import LoginForm
 
 def home(request):
     context = {
@@ -16,11 +17,14 @@ def home(request):
     return render(request, 'home_page.html', context)
 
 def login(request):
+    form = LoginForm(request.POST or None)
     context = {
-        'title': 'Login'
+        'title': 'Login',
+        'form': form
     }
+
     if request.method == 'POST':
-        print(request.POST)
-        print(request.POST.get('username'))
-        
+        print("Peticón POST: "request.POST.get('username'))
+        print("Formulario : "form['username'].data)
+
     return render(request, 'login.html', context)

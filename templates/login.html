@@ -17,13 +17,8 @@
 
             {% csrf_token %}
 
-            <div class="form-group row">
-              <label for="username" class="col-sm-1 col-form-label">Username</label>
-              <div class="col-sm-11">
-                <input type="text" class="form-control" id="username">
-              </div>
-            </div>
-
+            {{ form }}
+            
             <button type="submit" class="btn btn-primary">login</button>
           </form>
         </div>
