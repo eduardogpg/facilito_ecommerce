@@ -1,6 +1,8 @@
 from django.shortcuts import render
-#from django.http import HttpResponse
-#return HttpResponse('Hola mundo')
+
+#https://docs.djangoproject.com/en/2.2/topics/auth/default/#authenticating-users
+from django.contrib.auth import authenticate, login as django_login
+
 from .forms import LoginForm
 
 def home(request):
@@ -23,8 +25,16 @@ def login(request):
         'form': form
     }
 
-    if request.method == 'POST':
-        print("Peticón POST: "request.POST.get('username'))
-        print("Formulario : "form['username'].data)
+    if request.method == 'POST' and form.is_valid():
+        print("Username : ", form['username'].data)
+
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            django_login(request, user)
+            print("Usuario autenticado exitosamente!")
 
     return render(request, 'login.html', context)
