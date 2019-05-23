@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 
+from .forms import RegisterForm
+
 def home(request):
     products = [
         {'name': 'Playera', 'available': True},
@@ -13,17 +15,14 @@ def home(request):
     })
 
 def register(request):
+    form = RegisterForm(request.POST or None)
+
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
+        if form.is_valid():
+            user = form.save()
+            if user:
+                print("Usuario registrado exitosamente")
 
-        if username and password and email:
-            user = User.objects.create_user(
-                username=username, password=password, email=email,
-            )
-            #Crear validaciones
-            print('Usuario creado exitosamente.')
-
-
-    return render(request, 'register.html', {})
+    return render(request, 'register.html', {
+        'form': form
+    })
