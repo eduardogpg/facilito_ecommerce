@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import home, login
+from .views import home, register
 
 urlpatterns = [
     path('', home),
-    path('login/', login),
+    path('registro/', register),
     path('admin/', admin.site.urls),
 ]

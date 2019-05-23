@@ -1,40 +1,29 @@
 from django.shortcuts import render
-
-#https://docs.djangoproject.com/en/2.2/topics/auth/default/#authenticating-users
-from django.contrib.auth import authenticate, login as django_login
-
-from .forms import LoginForm
+from django.contrib.auth.models import User
 
 def home(request):
-    context = {
-        'title': 'Listado de productos',
-        'message': 'Productos',
-        'products': [
-            {'title': 'Playeras', 'stock': True},
-            {'title': 'Tazas', 'stock': True},
-            {'title': 'Art toy', 'stock': True},
-            {'title': 'Peluches', 'stock': False},
-        ]
-    }
-    return render(request, 'home_page.html', context)
+    products = [
+        {'name': 'Playera', 'available': True},
+        {'name': 'Taza', 'available': True},
+        {'name': 'ArtToy', 'available': False}
+    ]
 
-def login(request):
-    form = LoginForm(request.POST or None)
-    context = {
-        'title': 'Login',
-        'form': form
-    }
+    return render(request, 'home.html', {
+        'title': 'Productos', 'products': products
+    })
 
-    if request.method == 'POST' and form.is_valid():
-        print("Username : ", form['username'].data)
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
 
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
+        if username and password and email:
+            user = User.objects.create_user(
+                username=username, password=password, email=email,
+            )
+            #Crear validaciones
+            print('Usuario creado exitosamente.')
 
-        user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            django_login(request, user)
-            print("Usuario autenticado exitosamente!")
-
-    return render(request, 'login.html', context)
+    return render(request, 'register.html', {})
