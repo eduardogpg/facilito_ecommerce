@@ -28,9 +28,7 @@ def register(request):
                 messages.success(request, 'Cuenta creada exitosamente.')
                 return redirect('home')
 
-    return render(request, 'user/register.html', {
-        'form': form
-    })
+    return render(request, 'user/register.html', { 'form': form })
 
 def login_user(request):
     if request.user.is_authenticated:

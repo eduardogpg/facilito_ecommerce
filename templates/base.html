@@ -13,11 +13,10 @@
       {% if messages %}
         <ul class="messages">
             {% for message in messages %}
-              {% if message.tags == 'success' %}
-                <div class="alert alert-success" role="alert">{{ message }}</div>
-              {% else %}
-                <div class="alert alert-danger" role="alert">{{ message }}</div>
-              {% endif %}
+              <div class="alert {% if message.tags == 'success' %} alert-success {% else %} alert-danger {% endif %}" role="alert">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                {{ message }}
+              </div>
             {% endfor %}
         </ul>
       {% endif %}
