@@ -8,11 +8,13 @@ class RegisterForm(forms.Form):
         widget=forms.TextInput(attrs={
         'class': 'form-control', 'id': 'username', 'placeholder': 'Username'
     }))
+
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
         'class': 'form-control', 'id': 'email', 'placeholder': 'Email'
     }))
+
     password = forms.CharField(
         label='Password',
         required=True,

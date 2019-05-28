@@ -7,18 +7,7 @@ from django.contrib.auth.models import User
 
 from .forms import RegisterForm
 
-def home(request):
-    products = [
-        {'name': 'Playera', 'available': True},
-        {'name': 'Taza', 'available': True},
-        {'name': 'ArtToy', 'available': False}
-    ]
-
-    return render(request, 'home.html', {
-        'title': 'Productos', 'products': products
-    })
-
-def register(request):
+def register_view(request):
     form = RegisterForm(request.POST or None)
 
     if request.method == 'POST':
@@ -30,7 +19,7 @@ def register(request):
 
     return render(request, 'user/register.html', { 'form': form })
 
-def login_user(request):
+def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
 

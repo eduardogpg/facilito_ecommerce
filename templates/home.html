@@ -2,23 +2,11 @@
 
 {% block content %}
   <h1 class="text-center">Productos</h1>
-
-  <div class="row">
-    <div class="col-sm">
-      One of three columns
-    </div>
-    <div class="col-sm">
-      One of three columns
-    </div>
-    <div class="col-sm">
-      One of three columns
-    </div>
-  </div>
   
   <ul>
     {% for product in product_list %}
       <li>
-        {{ product.title }} - {{ product.description }}
+        <a href="{% url 'detail' slug=product.slug %}">{{ product.title }} - {{ product.description }}</a>
       </li>
     {% endfor %}
   </ul>

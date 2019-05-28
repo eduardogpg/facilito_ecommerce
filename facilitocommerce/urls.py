@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import home, register, logout_view, login_user as login
+from .views import register_view, login_view, logout_view
 from products.views import ProductListView, ProductDetailView
 
 from django.conf.urls.static import static
@@ -10,10 +10,9 @@ from django.conf import settings
 urlpatterns = [
     path('', ProductListView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('usuario/login', login, name='login'),
+    path('usuario/login', login_view, name='login'),
     path('usuario/logout', logout_view, name='logout'),
-    path('usuario/registro', register, name='register'),
-    #path('productos/<pk>', ProductDetailView.as_view()),
+    path('usuario/registro', register_view, name='register'),
     path('productos/', include('products.urls')),
 ]
 
