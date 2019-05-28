@@ -2,15 +2,23 @@
 
 {% block content %}
   <h1 class="text-center">Productos</h1>
+
+  <div class="row">
+    <div class="col-sm">
+      One of three columns
+    </div>
+    <div class="col-sm">
+      One of three columns
+    </div>
+    <div class="col-sm">
+      One of three columns
+    </div>
+  </div>
+  
   <ul>
-    {% for product in products %}
+    {% for product in product_list %}
       <li>
-        {{ product.name }} -
-        {% if product.available %}
-          Disponible
-        {% else %}
-          No disponible por el momento
-        {% endif %}
+        {{ product.title }} - {{ product.description }}
       </li>
     {% endfor %}
   </ul>

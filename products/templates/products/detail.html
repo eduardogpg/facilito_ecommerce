@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ object.title }}</h1>
+  <p> {{ object.description }}</p>
+  {{ object.image }}
+  <img src="{{ object.image.url }}" class="img-fluid" alt="">
+{% endblock %}
