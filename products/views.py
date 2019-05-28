@@ -11,7 +11,7 @@ class ProductListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Tienda facilita'
+        context['title'] = 'CodigoFacilito'
         return context
 
 class ProductDetailView(DetailView):
@@ -21,5 +21,5 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context['title'] = 'Producto'
         return context
