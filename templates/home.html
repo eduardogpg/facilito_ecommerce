@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 class="text-center">Productos</h1>
+  <h4 class="text-center mt-2">{{ promotion_title }}</h4>
+  <br>
 
-  <ul>
+  {% include 'search.html'%}
+  
+  <hr>
+  <div class="row">
     {% for product in product_list %}
-      {% include 'products/product.html' with product=product %}
+      <div class="col mt-5">
+        {% include 'products/product.html' with product=product %}
+      </div>
     {% endfor %}
-  </ul>
-
   </div>
+
 {% endblock %}

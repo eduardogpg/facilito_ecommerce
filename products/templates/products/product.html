@@ -5,8 +5,8 @@
     </a>
   {% endif %}
   <div class="card-body">
-    <h5 class="card-title">{{ product.title }}</h5>
-    <p class="card-text">{{ product.description }}</p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
+    <h5 class="card-title">{{ product.title | title }}</h5>
+    <p class="card-text">{{ product.description | truncatewords:20}}</p>
+    <a href="{% url 'products:detail' slug=product.slug %}" class="btn btn-primary">Ver</a>
   </div>
 </div>
