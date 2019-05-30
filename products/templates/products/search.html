@@ -5,7 +5,10 @@
   {% include 'search.html'%}
 
   <hr>
-  <p>Resultados: {{ count }}</p>
+  {% if query %}
+    <p>Resultados para: {{ query }} ({{ count }})</p>
+  {% endif %}
+
   <div class="row">
     {% for product in product_list %}
       <div class="col mt-5">
