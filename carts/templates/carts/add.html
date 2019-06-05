@@ -9,6 +9,8 @@
 <p> {{ cart.products.count }} productos en tu carrito </p>
 
 <button type="button" class="btn btn-warning">Proceder al pago</button>
-<button type="button" class="btn btn-info">Ver carrito</button>
+<a href="{% url 'carts:cart' %}">
+  <button type="button" class="btn btn-info">Ver carrito</button>
+</a>
 
 {% endblock %}

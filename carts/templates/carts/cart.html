@@ -1,7 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Carrito de compras</h2>
-<p>Total ${{ cart_obj.total }}</p>
+
+<div class="row">
+  {% if cart.products.exists%}
+    <div class="col-9">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col">Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in cart.products.all %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>
+            <img src="{{ product.image.url }}" width=60 height=60 alt="">
+          </td>
+          <td>
+            {{ product.title}}
+            <br>
+            <small>
+              <form action="{% url 'carts:remove' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <button type="submit" class="btn btn-link" style="padding:0px;">Eliminar</button>
+              </form>
+            </small>
+          </td>
+          <td>${{ product.price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <div class="col-3">
+      Subtotal ({{ cart.products.count }}): ${{ cart.total }}
+      <button type="button" class="btn btn-warning">Proceder al pago</button>
+    </div>
+  {% else %}
+    <h3>Tu carrito de compras está vacío.</h3>
+  {% endif %}
+</div>
 
 {% endblock %}
