@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from products.models import Product
 
@@ -12,8 +13,10 @@ class Cart(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-    @classmethod
-    def get_or_create(self, request):
-        pass
         
+def calculate_total(sender, instance, action, *args, **kwargs):
+    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
+        instance.total = sum( [product.price for product in instance.products.all() ])
+        instance.save()
+
+m2m_changed.connect(calculate_total, sender=Cart.products.through)

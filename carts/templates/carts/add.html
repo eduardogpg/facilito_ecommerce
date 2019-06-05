@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>1 producto agregado al carrito</h2>
+<p> {{ product.title }}</p>
+<p> ${{ product.price }}</p>
+
+<h5>Subtotal del pedito $ {{ cart.total }}</h5>
+<p> {{ cart.products.count }} productos en tu carrito </p>
+
+<button type="button" class="btn btn-warning">Proceder al pago</button>
+<button type="button" class="btn btn-info">Ver carrito</button>
+
+{% endblock %}
