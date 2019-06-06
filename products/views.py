@@ -37,10 +37,11 @@ class ProductSearchListView(ListView):
         return data
 
     def get_queryset(self):
+        print("\nEduardo Ismael")
         if self.exists_query():
             query = Q(title__icontains=self.query()) | Q(tag__title__icontains=self.query())
             return Product.objects.filter(query).distinct()
-            
+
         return Product.objects.none()
 
     def query(self):
