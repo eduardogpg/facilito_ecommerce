@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>1 producto agregado al carrito</h2>
-<p> {{ product.title }}</p>
-<p> ${{ product.price }}</p>
 
-<h5>Subtotal del pedito $ {{ cart.total }}</h5>
-<p> {{ cart.products.count }} productos en tu carrito </p>
+<div class="row">
+  <div class="col-3">
+    <img src="{{ product.image.url }}" width="200" height="200" alt="">
+  </div>
+  <div class="col">
+    <p class="h3 font-weight-bold text-success">1 producto agregado al carrito</p>
+    <a href="{% url 'products:detail' slug=product.slug %}">
+      <p class="font-weight-bold"> {{ product.title }}</p>
+    </a>
+    <p class="text-danger">${{ product.price }}</p>
 
-<button type="button" class="btn btn-warning">Proceder al pago</button>
-<a href="{% url 'carts:cart' %}">
-  <button type="button" class="btn btn-info">Ver carrito</button>
-</a>
+    <p class="h4 font-weight-bold">Subtotal del pedito <span class="text-danger">${{ cart.subtotal }}</span></p>
+    <p> {{ cart.products.count }} productos en tu carrito </p>
+
+    <button type="button" class="btn btn-warning">Proceder al pago</button>
+    <a href="{% url 'carts:cart' %}">
+      <button type="button" class="btn btn-info">Ver carrito</button>
+    </a>
+    <br>
+    <a href="{% url 'home' %}">Seguir comprando</a>
+  </div>
+</div>
 
 {% endblock %}

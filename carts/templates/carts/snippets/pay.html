@@ -1,0 +1,9 @@
+<div class="">
+{% if user.is_authenticated %}
+  <button type="button" class="btn btn-warning">Proceder al pago</button>
+{% else %}
+  <a href="{% url 'login' %}">
+  <button type="button" class="btn btn-info">Login</button>
+  </a>
+{% endif %}
+</div>

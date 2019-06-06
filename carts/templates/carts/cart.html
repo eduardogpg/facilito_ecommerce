@@ -1,49 +1,54 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class="row">
   {% if cart.products.exists%}
     <div class="col-9">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col"></th>
-          <th scope="col">Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for product in cart.products.all %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>
-            <img src="{{ product.image.url }}" width=60 height=60 alt="">
-          </td>
-          <td>
-            {{ product.title}}
-            <br>
-            <small>
-              <form action="{% url 'carts:remove' %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="product_id" value="{{ product.id }}">
-                <button type="submit" class="btn btn-link" style="padding:0px;">Eliminar</button>
-              </form>
-            </small>
-          </td>
-          <td>${{ product.price }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Precio</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in cart.products.all %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td> <img src="{{ product.image.url }}" width=60 height=60 alt=""> </td>
+            <td>
+              <a href="{% url 'products:detail' slug=product.slug %}">{{ product.title }}</a>
+              <small>
+                <form action="{% url 'carts:remove' %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="product_id" value="{{ product.id }}">
+                  <button type="submit" class="btn btn-link text-danger" style="padding:0px;">Eliminar</button>
+                </form>
+              </small>
+            </td>
+            <td>${{ product.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
     <div class="col-3">
-      Subtotal ({{ cart.products.count }}): ${{ cart.total }}
-      <button type="button" class="btn btn-warning">Proceder al pago</button>
+      <p class="font-weight-bold">
+        <span>Subtotal ({{ cart.products.count }})</span>
+        <span class="text-danger">${{ cart.subtotal }}</span>
+      </p>
+      <p class="font-weight-bold mt-1">
+        Total ${{ cart.total }}
+      </p>
+      {% include 'carts/snippets/pay.html'%}
     </div>
   {% else %}
-    <h3>Tu carrito de compras está vacío.</h3>
+  <div class="col">
+    <p class="h3">Tu carrito de compras está vacío.</p>
+    <a href="{% url 'home' %}">Seguir comprando.</a>
+  </div>
   {% endif %}
 </div>
 

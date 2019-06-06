@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
+
 {% block content %}
-  <h1>{{ object.title }}</h1>
-  <p> {{ object.description }}</p>
-  {% if object.image %}
-    <img src="{{ object.image.url }}" class="img-fluid" alt="">
-  {% endif %}
-  <br>
+<div class="row mt-2">
+  <div class="col-3">
+    <img src="{{ object.image.url }}" width="200" height="200">
+  </div>
+  <div class="col">
+    <p class="h1">{{ object.title }}</p>
+    <p class="h5 font-weight-bold">Precio: <span class="text-danger">${{ object.price }}</span></p>
+    <p>{{ object.description }}</p>
 
-<form action="{% url 'carts:add' %}" method="POST">
-  {% csrf_token %}
-  <input type="hidden" name="product_id" value="{{ object.id }}">
-  <button type="submit" class="btn btn-warning">Agregar al carrito</button>
-</form>
+    <form action="{% url 'carts:add' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="product_id" value="{{ object.id }}">
+      <button type="submit" class="btn btn-warning">Agregar al carrito</button>
+    </form>
 
+  </div>
+</div>
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h4 class="text-center mt-2">{{ promotion_title }}</h4>
+  <h4 class="text-center">{{ promotion_title }}</h4>
   <br>
-
+  
   {% include 'search.html'%}
 
   <hr>
@@ -15,4 +15,8 @@
     {% endfor %}
   </div>
 
+{% endblock %}
+
+{% block footer %}
+  {% include 'footer.html' %}
 {% endblock %}

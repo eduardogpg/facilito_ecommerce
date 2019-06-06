@@ -9,13 +9,12 @@ from .forms import RegisterForm
 
 def register_view(request):
     form = RegisterForm(request.POST or None)
-
-    if request.method == 'POST':
-        if form.is_valid():
-            user = form.save()
-            if user:
-                messages.success(request, 'Cuenta creada exitosamente.')
-                return redirect('home')
+    if request.method == 'POST' and form.is_valid():
+        user = form.save()
+        if user:
+            login(request, user)
+            messages.success(request, 'Cuenta creada exitosamente.')
+            return redirect('home')
 
     return render(request, 'user/register.html', { 'form': form })
 
