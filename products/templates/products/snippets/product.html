@@ -1,7 +1,7 @@
-<div class="card" style="width: 18rem;">
+<div class="card h-100">
   {% if product.image %}
     <a href="{% url 'products:detail' slug=product.slug %}">
-      <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
+      <img class="card-img-top" src="{{ product.image.url }}" >
     </a>
   {% endif %}
   <div class="card-body">

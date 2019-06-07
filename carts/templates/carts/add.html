@@ -1,28 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="row">
-  <div class="col-3">
-    <img src="{{ product.image.url }}" width="200" height="200" alt="">
-  </div>
-  <div class="col">
-    <p class="h3 font-weight-bold text-success">1 producto agregado al carrito</p>
-    <a href="{% url 'products:detail' slug=product.slug %}">
-      <p class="font-weight-bold"> {{ product.title }}</p>
+<div class="col-3">
+  <img src="{{ product.image.url }}" width="200" height="200" alt="">
+</div>
+<div class="col">
+  <div class="h3 font-weight-bold text-success">1 producto agregado al carrito</div>
+  <div class="">
+    <a href="{% url 'products:detail' slug=product.slug %}" class="font-weight-bold">
+      {{ product.title }}
     </a>
-    <p class="text-danger">${{ product.price }}</p>
-
-    <p class="h4 font-weight-bold">Subtotal del pedito <span class="text-danger">${{ cart.subtotal }}</span></p>
-    <p> {{ cart.products.count }} productos en tu carrito </p>
-
-    <button type="button" class="btn btn-warning">Proceder al pago</button>
-    <a href="{% url 'carts:cart' %}">
-      <button type="button" class="btn btn-info">Ver carrito</button>
-    </a>
-    <br>
-    <a href="{% url 'home' %}">Seguir comprando</a>
   </div>
+  <div class="font-weight-bold text-danger">
+    ${{ product.price }}
+  </div>
+  <div class="h4 font-weight-bold">
+    Subtotal del pedito <span class="text-danger">${{ cart.subtotal }}</span>
+  </div>
+  <div class="">
+    {{ cart.products.count }} productos en tu carrito
+  </div>
+  <div class="mt-2">
+    {% include 'carts/snippets/pay.html' %}
+    <a class="btn btn-info" href="{% url 'carts:cart' %}" role="button">Ver carrito</a>
+  </div>
+  <div class="mt-2">
+      <a href="{% url 'home' %}">Seguir comprando</a>
+  </div>
+
 </div>
 
 {% endblock %}

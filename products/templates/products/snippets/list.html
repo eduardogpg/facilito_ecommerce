@@ -1,0 +1,7 @@
+<div class="row">
+  {% for product in products %}
+    <div class="col-3 mt-5">
+      {% include 'products/snippets/product.html' with product=product %}
+    </div>
+  {% endfor %}
+</div>

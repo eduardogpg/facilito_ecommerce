@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-8">
+  <div class="h3">Revisa tu pedido</div>
+
+  <div class="card">
+    <div class="card-body">
+      {% for product in cart.products.all %}
+        <div class="row">
+          <div class="col-2">
+            <img src="{{ product.image.url }}" width="60" height="60">
+          </div>
+          <div class="col">
+            <div class="row">
+              <strong> <a href="{% url 'products:detail' slug=product.slug%}">{{ product.title }}</a></strong>
+            </div>
+            <div class="row">
+              <strong class="text-danger">${{ product.price }}</strong>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+<div class="col">
+  <div class="card">
+    <div class="card-body">
+      <div class="font-weight-bold">
+        Resumen del pedido
+      </div>
+      <div class="summary">
+        <table class="table table-borderless table-sm">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Productos:</td>
+              <td>$206.67</td>
+            </tr>
+            <tr>
+              <td>Envío:</td>
+              <td>$39.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <hr>
+        <div class="font-weight-bold text-danger">
+          Total (impuestos incluidos) ${{ order.total }}
+        </div>
+      </div>
+      <div class="mt-2">
+        <a class="btn btn-warning" href="{% url 'orders:order' %}" role="button">Confirmar pedido</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

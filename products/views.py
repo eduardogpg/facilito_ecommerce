@@ -9,7 +9,7 @@ class ProductListView(ListView):
 
     model = Product
     template_name = 'home.html'
-    queryset = Product.objects.last()
+    queryset = Product.objects.filter(active=True).order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,9 +37,8 @@ class ProductSearchListView(ListView):
         return data
 
     def get_queryset(self):
-        print("\nEduardo Ismael")
         if self.exists_query():
-            query = Q(title__icontains=self.query()) | Q(tag__title__icontains=self.query())
+            query = Q(title__icontains=self.query()) | Q(category__title__icontains=self.query())
             return Product.objects.filter(query).distinct()
 
         return Product.objects.none()

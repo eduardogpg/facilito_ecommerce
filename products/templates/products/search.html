@@ -6,13 +6,7 @@
   {% if query %}
     <p>Resultados para: {{ query }} ({{ count }})</p>
   {% endif %}
-
-  <div class="row">
-    {% for product in product_list %}
-      <div class="col mt-5">
-        {% include 'products/snippets/product.html' with product=product %}
-      </div>
-    {% endfor %}
-  </div>
+  
+  {% include 'products/snippets/list.html' with products=product_list%}
 
 {% endblock %}

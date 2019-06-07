@@ -1,20 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h4 class="text-center">{{ promotion_title }}</h4>
-  <br>
-  
-  {% include 'search.html'%}
-
-  <hr>
-  <div class="row">
-    {% for product in product_list %}
-      <div class="col mt-5">
-        {% include 'products/snippets/product.html' with product=product %}
-      </div>
-    {% endfor %}
+  <div class="col">
+    <h4 class="text-center">{{ promotion_title }}</h4>
+    {% include 'search.html'%}
+    
+    {% include 'products/snippets/list.html' with products=product_list%}
   </div>
-
 {% endblock %}
 
 {% block footer %}

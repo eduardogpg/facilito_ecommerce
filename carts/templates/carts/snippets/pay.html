@@ -1,9 +1,5 @@
-<div class="">
 {% if user.is_authenticated %}
-  <button type="button" class="btn btn-warning">Proceder al pago</button>
+  <a class="btn btn-warning" href="{% url 'orders:order' %}" role="button">Proceder al pago</a>
 {% else %}
-  <a href="{% url 'login' %}">
-  <button type="button" class="btn btn-info">Login</button>
-  </a>
+  <a class="btn btn-info" href="{% url 'login' %}" role="button">Login</a>
 {% endif %}
-</div>

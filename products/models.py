@@ -22,13 +22,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     # def save(self, *args, **kwargs):
     #     self.slug = slugify(self.title)
     #
     #     super(Product, self).save(*args, **kwargs)
 
-def set_slug(sender, instance, *args, **kwargs):
-    instance.slug = slugify(instance.title)
+def set_slug(sender, instance, val=1, *args, **kwargs):
+    slug = slugify(instance.title)
+
+    while Product.objects.filter(slug=slug).exists():
+        slug = slugify(instance.title +  str(val))
+        val += 1
+    
+    instance.slug = slug
 
 pre_save.connect(set_slug, sender=Product)
