@@ -25,11 +25,7 @@ def generate_order_id(sender, instance, *args, **kwargs):
 def calculate_total(sender, instance, *args, **kwargs):
     instance.total = instance.cart.total
 
-def calculate_total_by_cart(sender, instance, action, *args, **kwargs):
-    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
-        Order.objects.filter(cart_id=instance.id).update(total=instance.total)
-
 pre_save.connect(generate_order_id, sender=Order)
 pre_save.connect(calculate_total, sender=Order)
 
-m2m_changed.connect(calculate_total_by_cart, sender=Cart.products.through)
+#m2m_changed.connect(calculate_total_by_cart, sender=Cart.products.through)

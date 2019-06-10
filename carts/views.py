@@ -16,7 +16,8 @@ def add(request):
     cart_obj.products.add(product_obj)
 
     return render(request, 'carts/add.html', {
-        'cart': cart_obj, 'product': product_obj
+        'cart': cart_obj, 'product': product_obj,
+        'message_product': 'productos' if cart_obj.products.count() > 1 else 'producto'
     })
 
 def remove(request):

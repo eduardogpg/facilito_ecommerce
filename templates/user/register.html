@@ -1,44 +1,47 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Registro</h1>
+<div class="col">
+  <h1>Registro</h1>
 
-<form method="POST">
-  {% csrf_token %}
-  <!--
-  <div class="form-group">
-    {{ form.username.label_tag }}
-    {{ form.username }}
-  </div>
-
-  <div class="form-group">
-    {{ form.email.label_tag }}
-    {{ form.email }}
-  </div>
-
-  <div class="form-group">
-    {{ form.password.label_tag }}
-    {{ form.password }}
-  </div>
-
-  <div class="form-group">
-    {{ form.password2.label_tag }}
-    {{ form.password2 }}
-  </div>
-  -->
-
-  {%for field in form %}
-    <div class="form-group {%if field.errors %} error {% endif %}">
-      {{ field.label_tag }}
-      {{ field }}
-
-      {% if field.errors %}
-        {{ field.errors }}
-      {% endif %}
-
+  <form method="POST">
+    {% csrf_token %}
+    <!--
+    <div class="form-group">
+      {{ form.username.label_tag }}
+      {{ form.username }}
     </div>
-  {% endfor %}
 
-  <button type="submit" class="btn btn-primary">Crear cuenta</button>
-</form>
+    <div class="form-group">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+    </div>
+
+    <div class="form-group">
+      {{ form.password.label_tag }}
+      {{ form.password }}
+    </div>
+
+    <div class="form-group">
+      {{ form.password2.label_tag }}
+      {{ form.password2 }}
+    </div>
+    -->
+
+    {%for field in form %}
+      <div class="form-group {%if field.errors %} error {% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+
+        {% if field.errors %}
+          {{ field.errors }}
+        {% endif %}
+
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Crear cuenta</button>
+  </form>
+
+</div>
 {% endblock %}

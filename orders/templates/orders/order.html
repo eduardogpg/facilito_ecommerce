@@ -13,13 +13,14 @@
           </div>
           <div class="col">
             <div class="row">
-              <strong> <a href="{% url 'products:detail' slug=product.slug%}">{{ product.title }}</a></strong>
+              <strong> <a href="{% url 'products:product' slug=product.slug%}">{{ product.title }}</a></strong>
             </div>
             <div class="row">
               <strong class="text-danger">${{ product.price }}</strong>
             </div>
           </div>
         </div>
+        <hr>
       {% endfor %}
     </div>
   </div>
@@ -59,7 +60,7 @@
         </div>
       </div>
       <div class="mt-2">
-        <a class="btn btn-warning" href="{% url 'orders:order' %}" role="button">Confirmar pedido</a>
+        <a class="btn btn-warning" href="{% url 'orders:complete' %}" role="button">Confirmar pedido</a>
       </div>
     </div>
   </div>

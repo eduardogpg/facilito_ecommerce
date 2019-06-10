@@ -10,12 +10,13 @@ from django.conf import settings
 urlpatterns = [
     path('', ProductListView.as_view(), name='home'),
     path('admin/', admin.site.urls),
-    path('usuarios/login', views.login_view, name='login'),
-    path('usuarios/logout', views.logout_view, name='logout'),
-    path('usuarios/registro', views.register_view, name='register'),
+    path('usuario/login', views.login_view, name='login'),
+    path('usuario/logout', views.logout_view, name='logout'),
+    path('usuario/registro', views.register_view, name='register'),
     path('productos/', include('products.urls')),
     path('carrito/', include('carts.urls')),
     path('orden/', include('orders.urls')),
+    path('direccion/', include('billing_profiles.urls')),
 ]
 
 if settings.DEBUG:

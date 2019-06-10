@@ -1,12 +1,12 @@
 <div class="card h-100">
   {% if product.image %}
-    <a href="{% url 'products:detail' slug=product.slug %}">
+    <a href="{% url 'products:product' slug=product.slug %}">
       <img class="card-img-top" src="{{ product.image.url }}" >
     </a>
   {% endif %}
   <div class="card-body">
     <h5 class="card-title">{{ product.title | title }}</h5>
     <p class="card-text">{{ product.description | truncatewords:20}}</p>
-    <a href="{% url 'products:detail' slug=product.slug %}" class="btn btn-primary">Ver Más</a>
+    <a href="{% url 'products:product' slug=product.slug %}" class="btn btn-primary">Ver Más</a>
   </div>
 </div>

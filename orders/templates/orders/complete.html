@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col">
+
+{% if billing_profile %}
+<div class="h3">
+  Recoge el pedido en tu Punto de entrega.
+</div>
+
+<div class="">
+  {% include 'billing_profiles/snippets/billing_profile.html' with billing_profile=billing_profile %}
+</div>
+
+<div class="mt-3">
+  <a href="#" class="btn btn-warning">Entregar a esta dirección</a>
+</div>
+
+{% else %}
+
+<div class="h3">
+  Registra tu dirección de envío
+</div>
+
+<div class="">
+  <form method="POST">
+    {% csrf_token %}
+
+    {%for field in form %}
+      <div class="form-group {%if field.errors %} error {% endif %}">
+        {{ field.label_tag }}
+        {{ field }}
+
+        {% if field.errors %}
+          {{ field.errors }}
+        {% endif %}
+
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+  </form>
+</div>
+
+{% endif %}
+
+</div>
+{% endblock %}

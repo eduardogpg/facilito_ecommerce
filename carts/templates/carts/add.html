@@ -7,7 +7,7 @@
 <div class="col">
   <div class="h3 font-weight-bold text-success">1 producto agregado al carrito</div>
   <div class="">
-    <a href="{% url 'products:detail' slug=product.slug %}" class="font-weight-bold">
+    <a href="{% url 'products:product' slug=product.slug %}" class="font-weight-bold">
       {{ product.title }}
     </a>
   </div>
@@ -18,7 +18,7 @@
     Subtotal del pedito <span class="text-danger">${{ cart.subtotal }}</span>
   </div>
   <div class="">
-    {{ cart.products.count }} productos en tu carrito
+    {{ cart.products.count }} {{ message_product }} en tu carrito
   </div>
   <div class="mt-2">
     {% include 'carts/snippets/pay.html' %}
