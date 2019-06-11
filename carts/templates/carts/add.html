@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load products_extras %}
 
 {% block content %}
 <div class="col-3">
@@ -12,10 +13,10 @@
     </a>
   </div>
   <div class="font-weight-bold text-danger">
-    ${{ product.price }}
+    {{ product.price | price_format }}
   </div>
   <div class="h4 font-weight-bold">
-    Subtotal del pedito <span class="text-danger">${{ cart.subtotal }}</span>
+    Subtotal del pedito <span class="text-danger">{{ cart.subtotal | price_format }}</span>
   </div>
   <div class="">
     {{ cart.products.count }} {{ message_product }} en tu carrito
@@ -27,7 +28,6 @@
   <div class="mt-2">
       <a href="{% url 'home' %}">Seguir comprando</a>
   </div>
-
 </div>
 
 {% endblock %}

@@ -1,0 +1,93 @@
+[
+{
+    "model": "products.product",
+    "pk": 6,
+    "fields": {
+        "title": "Playera para caballero",
+        "description": "Una playera para cabellero",
+        "price": "5.00",
+        "slug": "playera-para-caballero",
+        "image": "products/playera.png",
+        "active": true,
+        "created_at": "2019-06-05T23:57:03.123Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+        "title": "Playera para dama",
+        "description": "Una playera para dama",
+        "price": "6.00",
+        "slug": "playera-para-dama",
+        "image": "products/playera2.png",
+        "active": true,
+        "created_at": "2019-06-05T23:57:19.635Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 8,
+    "fields": {
+        "title": "Mochila",
+        "description": "Mochila ideal para guardar tus cosas m\u00e1s preciadas cuando sales de tu casa.",
+        "price": "10.00",
+        "slug": "mochila",
+        "image": "products/mochila.png",
+        "active": true,
+        "created_at": "2019-06-05T23:57:44.150Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 9,
+    "fields": {
+        "title": "Art toy",
+        "description": "Artoy",
+        "price": "10.00",
+        "slug": "art-toy",
+        "image": "products/IMG_7245.JPG",
+        "active": false,
+        "created_at": "2019-06-06T16:16:21.853Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 10,
+    "fields": {
+        "title": "El gato",
+        "description": "Lampara",
+        "price": "9.00",
+        "slug": "el-gato",
+        "image": "products/81k-sg1HReL._SL1500_.jpg",
+        "active": true,
+        "created_at": "2019-06-06T16:19:46.240Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 11,
+    "fields": {
+        "title": "Adaparador de corriente",
+        "description": "Nuevo adaptador de corriente.",
+        "price": "2.00",
+        "slug": "adaparador-de-corriente",
+        "image": "products/518GPjMv1rL._SX466_.jpg",
+        "active": true,
+        "created_at": "2019-06-06T16:32:42.029Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 12,
+    "fields": {
+        "title": "El gato",
+        "description": "El gato",
+        "price": "1.00",
+        "slug": "el-gato2",
+        "image": "products/61379018_2356240181081437_6987998578996150272_n.jpg",
+        "active": true,
+        "created_at": "2019-06-06T18:53:02.656Z"
+    }
+}
+]

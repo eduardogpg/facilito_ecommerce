@@ -6,7 +6,6 @@ from django.views.generic.detail import DetailView
 from .models import Product
 
 class ProductListView(ListView):
-
     model = Product
     template_name = 'home.html'
     queryset = Product.objects.filter(active=True).order_by('-id')
@@ -18,7 +17,6 @@ class ProductListView(ListView):
         return context
 
 class ProductDetailView(DetailView):
-
     model = Product
     template_name = 'products/product.html'
 

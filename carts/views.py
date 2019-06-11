@@ -17,18 +17,20 @@ def cart(request):
 
 def add(request):
     product = get_object_or_404(Product, id=request.POST.get('product_id') )
+
     cart = get_or_create_car(request)
     cart.products.add(product)
-    
+
     return render(request, 'carts/add.html', {
-        'cart': cart, 'product': product,
+        'cart': cart,
+        'product': product,
         'message_product': 'productos' if cart.products.count() > 1 else 'producto'
     })
 
 def remove(request):
     cart = get_or_create_car(request)
     product = get_object_or_404(Product, id=request.POST.get('product_id'))
-    if product in cart.products.all():
-        cart.products.remove(product)
+
+    cart.products.remove(product)
 
     return redirect('carts:cart')

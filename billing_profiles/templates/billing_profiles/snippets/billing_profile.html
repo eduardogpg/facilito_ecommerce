@@ -8,17 +8,19 @@
 
     {% if request.user.id == billing_profile.user_id %}
       <a href="{% url 'billing_profiles:edit' pk=billing_profile.id %}" class="btn btn-info mt-3">Editar</a>
-      {% if not billing_profile.default %}
+      {% if not billing_profile.default and edit %}
         <a href="{% url 'billing_profiles:delete' pk=billing_profile.id %}" class="btn btn-danger mt-3">Eliminar</a>
       {% endif %}
 
-      <div class="mt-2 text-info">
-        {% if billing_profile.default %}
-          Dirección principal
-        {% else %}
-          <a href="{% url 'billing_profiles:default' pk=billing_profile.id %}">Establecer como dirección principal</a>
-        {% endif %}
-      </div>
+      {% if edit %}
+        <div class="mt-2 text-info">
+          {% if billing_profile.default %}
+            Dirección principal
+          {% else %}
+            <a href="{% url 'billing_profiles:default' pk=billing_profile.id %}">Establecer como dirección principal</a>
+          {% endif %}
+        </div>
+      {% endif %}
 
     {% endif %}
 

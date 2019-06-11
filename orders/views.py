@@ -13,7 +13,8 @@ from carts.utils import get_or_create_car
 @login_required(login_url='login')
 def order(request):
     cart = get_or_create_car(request)
-    if cart.products.count() == 0 :
+
+    if not cart.contains_products():
         return redirect('carts:cart')
 
     order = get_or_create_order(cart)
@@ -27,6 +28,10 @@ def order(request):
 @login_required(login_url='login')
 def billing_address(request):
     cart = get_or_create_car(request)
+
+    if not cart.contains_products():
+        return redirect('carts:cart')
+
     order = get_or_create_order(cart)
     form = BillingProfileForm(request.POST or None)
 
@@ -57,6 +62,10 @@ def check_billing_address(request, pk):
         return redirect('home')
 
     cart = get_or_create_car(request)
+
+    if not cart.contains_products():
+        return redirect('carts:cart')
+
     order = get_or_create_order(cart)
 
     order.billing_profile = billing_profile

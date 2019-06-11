@@ -10,6 +10,10 @@ class BillingProfile(models.Model):
     reference = models.CharField(max_length=300)
     zip = models.CharField(max_length=10, null=False, blank=False)
     default = models.BooleanField(default=False)
-    
+
+    def set_default(self):
+        self.default = True
+        self.save()
+
     def __str__(self):
         return self.zip

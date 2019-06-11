@@ -35,6 +35,10 @@ class Cart(models.Model):
     def calculate_total(self):
         return self.subtotal + (self.subtotal * decimal.Decimal(Cart.FEE))
 
+    def contains_products(self):
+        return self.products.exists()
+
+    
 def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
         instance.cart_id = str(uuid.uuid4())
