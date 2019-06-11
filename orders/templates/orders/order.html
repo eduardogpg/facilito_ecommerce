@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block breadcrum %}
+<div class="mt-2">
+  {% include 'orders/snippets/breadcrumb.html' with breadcrumb=breadcrumb %}
+</div>
+{% endblock %}
+
 {% block content %}
 <div class="col-8">
   <div class="h3">Revisa tu pedido</div>
@@ -62,7 +68,7 @@
         </div>
       </div>
       <div class="mt-2">
-        <a class="btn btn-warning" href="{% url 'orders:complete' %}" role="button">Confirmar pedido</a>
+        <a class="btn btn-warning" href="{% url 'orders:billing_address' %}" role="button">Confirmar pedido</a>
       </div>
     </div>
   </div>

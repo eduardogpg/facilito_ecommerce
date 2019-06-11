@@ -9,6 +9,7 @@ class BillingProfile(models.Model):
     phone = models.IntegerField()
     reference = models.CharField(max_length=300)
     zip = models.CharField(max_length=10, null=False, blank=False)
-
+    default = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.zip

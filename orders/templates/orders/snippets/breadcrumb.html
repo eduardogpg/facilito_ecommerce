@@ -1,0 +1,9 @@
+<nav class="breadcrumb">
+  {% for option in breadcrumb %}
+    {% if option.active %}
+      <a class="breadcrumb-item" href="{{ option.url }}">{{ option.title }}</a>
+    {% else %}
+      <span class="breadcrumb-item active">{{ option.title }}</span>
+    {% endif %}
+  {% endfor %}
+</nav>
