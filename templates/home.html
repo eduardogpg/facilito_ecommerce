@@ -3,8 +3,8 @@
 {% block content %}
   <div class="col">
     <h4 class="text-center">{{ promotion_title }}</h4>
-    {% include 'search.html'%}
-    
+    {% include 'products/snippets/search.html'%}
+
     {% include 'products/snippets/list.html' with products=product_list%}
   </div>
 {% endblock %}

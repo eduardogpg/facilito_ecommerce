@@ -9,7 +9,9 @@
       {% for product in cart.products.all %}
         <div class="row">
           <div class="col-2">
-            <img src="{{ product.image.url }}" width="60" height="60">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" width="60" height="60">
+            {% endif %}
           </div>
           <div class="col">
             <div class="row">
@@ -44,11 +46,11 @@
           <tbody>
             <tr>
               <td>Productos:</td>
-              <td>$206.67</td>
+              <td>${{ cart.subtotal }}</td>
             </tr>
             <tr>
               <td>Envío:</td>
-              <td>$39.00</td>
+              <td>${{ order.shipping_total }}</td>
             </tr>
           </tbody>
         </table>

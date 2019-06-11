@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+<div class="col">
+  {% include 'products/snippets/search.html' with text=query %}
   <hr>
   {% if query %}
     <p>Resultados para: {{ query }} ({{ count }})</p>
   {% endif %}
-  
+
   {% include 'products/snippets/list.html' with products=product_list%}
+
+</div>
 
 {% endblock %}

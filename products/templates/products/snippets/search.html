@@ -1,6 +1,6 @@
 <form action="{% url 'products:search'%}">
   <div class="input-group">
-    <input type="text" class="form-control" placeholder="Buscar" name="q">
+    <input type="text" value="{{ text }}" class="form-control" placeholder="Buscar" name="q">
     <div class="input-group-append">
       <input type="submit" name="" value="Buscar" class="btn btn-info"></input>
     </div>

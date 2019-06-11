@@ -6,24 +6,29 @@ from .utils import get_or_create_car
 from products.models import Product
 
 def cart(request):
+    cart = get_or_create_car(request)
+    count = cart.products.count()
+
     return render(request, 'carts/cart.html', {
-        'cart': get_or_create_car(request)
+        'cart': cart,
+        'count': count,
+        'message_product': 'productos' if count > 1 else 'producto'
     })
 
 def add(request):
-    product_obj = get_object_or_404(Product, id=request.POST.get('product_id', 7))
-    cart_obj = get_or_create_car(request)
-    cart_obj.products.add(product_obj)
-
+    product = get_object_or_404(Product, id=request.POST.get('product_id') )
+    cart = get_or_create_car(request)
+    cart.products.add(product)
+    
     return render(request, 'carts/add.html', {
-        'cart': cart_obj, 'product': product_obj,
-        'message_product': 'productos' if cart_obj.products.count() > 1 else 'producto'
+        'cart': cart, 'product': product,
+        'message_product': 'productos' if cart.products.count() > 1 else 'producto'
     })
 
 def remove(request):
-    cart_obj = get_or_create_car(request)
-    product_obj = get_object_or_404(Product, id=request.POST.get('product_id'))
-    if product_obj in cart_obj.products.all():
-        cart_obj.products.remove(product_obj)
+    cart = get_or_create_car(request)
+    product = get_object_or_404(Product, id=request.POST.get('product_id'))
+    if product in cart.products.all():
+        cart.products.remove(product)
 
     return redirect('carts:cart')

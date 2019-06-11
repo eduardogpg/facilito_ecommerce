@@ -23,23 +23,7 @@
 </div>
 
 <div class="">
-  <form method="POST">
-    {% csrf_token %}
-
-    {%for field in form %}
-      <div class="form-group {%if field.errors %} error {% endif %}">
-        {{ field.label_tag }}
-        {{ field }}
-
-        {% if field.errors %}
-          {{ field.errors }}
-        {% endif %}
-
-      </div>
-    {% endfor %}
-
-    <button type="submit" class="btn btn-primary">Registrar</button>
-  </form>
+  {% include 'billing_profiles/snippets/form.html' with form=form message='Registrar'%}
 </div>
 
 {% endif %}
