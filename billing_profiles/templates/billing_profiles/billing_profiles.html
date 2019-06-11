@@ -6,7 +6,7 @@
   <a href="{% url 'billing_profiles:create' %}">Agregra nueva dirección</a>
 
   {% for profile in object_list %}
-    <div class="mt-2">
+    <div class="mt-2 mb-5">
       {% include 'billing_profiles/snippets/billing_profile.html' with billing_profile=profile %}
     </div>
   {% endfor %}

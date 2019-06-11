@@ -15,6 +15,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .models import BillingProfile
 from .forms import BillingProfileForm
 
+@login_required(login_url='login')
 def create(request):
     form = BillingProfileForm(request.POST or None)
 
@@ -31,6 +32,7 @@ def create(request):
         'form': form
     })
 
+@login_required(login_url='login')
 def default(request, pk):
     billing_profile = get_object_or_404(BillingProfile, pk=pk)
     if request.user.id != billing_profile.user_id:
