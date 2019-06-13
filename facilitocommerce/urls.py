@@ -16,7 +16,7 @@ urlpatterns = [
     path('productos/', include('products.urls')),
     path('carrito/', include('carts.urls')),
     path('orden/', include('orders.urls')),
-    path('direccion/', include('billing_profiles.urls')),
+    path('direccion/', include('shipping_addresses.urls')),
 ]
 
 if settings.DEBUG:

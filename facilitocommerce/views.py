@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import redirect
+
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib.auth.models import User
@@ -30,6 +32,10 @@ def login_view(request):
         if user:
             login(request, user)
             messages.success(request, 'Te damos la bienvenida {}'.format(user.username))
+
+            if request.GET.get('next'):
+                return HttpResponseRedirect(request.GET['next'])
+
             return redirect('home')
 
     return render(request, 'user/login.html', {})

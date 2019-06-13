@@ -5,7 +5,7 @@ from .models import Order
 def breadcrumb(products=True, addres=False, pay=False, confirmation=False):
     return [
         { 'title': 'Productos', 'active': products, 'url': reverse('orders:order') },
-        { 'title': 'Dirección', 'active': addres, 'url': reverse('orders:billing_address') },
+        { 'title': 'Dirección', 'active': addres, 'url': reverse('orders:shipping_address') },
         { 'title': 'Pago', 'active': pay, 'url': '/orden' },
         { 'title': 'Confirmación', 'active': confirmation, 'url': '/orden' },
     ]

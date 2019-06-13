@@ -1,0 +1,28 @@
+<div class="card">
+  <h5 class="card-header"></h5>
+  <div class="card-body">
+    <h5 class="card-title">{{ shipping_address.address }}</h5>
+    <div class="card-text">{{ shipping_address.city_format }} </div>
+    <div class="card-text">{{ shipping_address.reference }}</div>
+    <div class="card-text">{{ shipping_address.zip }}</div>
+
+    {% if request.user.id == shipping_address.user_id %}
+      <a href="{% url 'shipping_addresses:edit' pk=shipping_address.id %}" class="btn btn-info mt-3">Editar</a>
+      {% if not shipping_address.default and edit %}
+        <a href="{% url 'shipping_addresses:delete' pk=shipping_address.id %}" class="btn btn-danger mt-3">Eliminar</a>
+      {% endif %}
+
+      {% if edit %}
+        <div class="mt-2 text-info">
+          {% if shipping_address.default %}
+            Dirección principal
+          {% else %}
+            <a href="{% url 'shipping_addresses:default' pk=shipping_address.id %}">Establecer como dirección principal</a>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    {% endif %}
+
+  </div>
+</div>

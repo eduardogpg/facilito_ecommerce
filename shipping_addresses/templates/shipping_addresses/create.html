@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col">
+  <p class="h3">Crear</p>
+  {% include 'shipping_addresses/snippets/form.html' with form=form message='Crear'%}
+</div>
+
+{% endblock %}

@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from carts.models import Cart
-from billing_profiles.models import BillingProfile
+from shipping_addresses.models import ShippingAddress
 
 class Order(models.Model):
     STATUS_CHOICES = (
@@ -17,12 +17,22 @@ class Order(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='c')
     shipping_total = models.DecimalField(default=4.69, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
-    billing_profile = models.ForeignKey(BillingProfile,
+    shipping_address = models.ForeignKey(ShippingAddress,
                                         null=True, blank=True,
                                         on_delete=models.CASCADE)
 
     def __str__(self):
         return self.order_id
+
+    def get_or_set_default_shipping_address(self):
+        if self.shipping_address_id:
+            return self.shipping_address
+
+        shipping_address = self.cart.user.shippingaddress_set.filter(default=True).first()
+        if shipping_address:
+            self.shipping_address = shipping_address
+
+        return shipping_address
 
     def update_total(self):
         self.total = self.calculate_total()
