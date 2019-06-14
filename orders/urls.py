@@ -6,6 +6,7 @@ app_name = 'orders'
 
 urlpatterns = [
     path('', views.order, name='order'),
+    path('cancelar', views.cancel, name='cancel'),
     path('confirmar', views.confirm, name='confirm'),
     path('completar', views.complete, name='complete'),
     path('direccion', views.address, name='address'),

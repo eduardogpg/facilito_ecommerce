@@ -50,6 +50,10 @@ class Cart(models.Model):
         self.status = StatusChoice.CLOSED
         self.save()
 
+    def close(self):
+        self.status = StatusChoice.CLOSED
+        self.save()
+
 def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
         instance.cart_id = str(uuid.uuid4())

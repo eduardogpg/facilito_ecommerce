@@ -52,6 +52,9 @@
 <div class="col">
   {% url 'orders:complete' as url %}
   {% include 'orders/snippets/resume.html' with cart=cart order=order url=url %}
+  <div class="cancel mt-2">
+    <a href="{% url 'orders:cancel' %}" class="btn btn-danger">Cancelar orden</a>
+  </div>
 </div>
 
 {% endblock%}

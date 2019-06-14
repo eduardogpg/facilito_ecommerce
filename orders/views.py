@@ -13,6 +13,8 @@ from .models import Order
 from .models import StatusChoice
 
 from .utils import breadcrumb
+from .utils import get_order
+from .utils import destroy_order
 from .utils import get_or_create_order
 
 from carts.utils import destroy_cart
@@ -129,6 +131,21 @@ def complete(request):
     order.complete()
 
     destroy_cart(request)
+    destroy_order(request)
 
     messages.success(request, 'Compra completada exitosamente.')
+    return redirect('carts:cart')
+
+@login_required(login_url='login')
+def cancel(request):
+    cart = get_or_create_car(request)
+    order = get_or_create_order(cart, request)
+
+    order.cancel()
+    cart.close()
+
+    destroy_cart(request)
+    destroy_order(request)
+
+    messages.error(request, 'Orden cancelada')
     return redirect('carts:cart')

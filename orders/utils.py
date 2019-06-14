@@ -15,9 +15,12 @@ def get_or_create_order(cart, request):
 
     if not order and request.user.is_authenticated:
         order = Order.objects.create(cart=cart, user=request.user)
-    
+
     request.session['order_id'] = order.order_id
     return order
 
 def get_order(request):
     return Order.objects.filter(order_id=request.session.get('order_id')).first()
+
+def destroy_order(request):
+    request.session['order_id'] = None

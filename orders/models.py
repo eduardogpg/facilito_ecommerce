@@ -45,7 +45,7 @@ class Order(models.Model):
         if shipping_address:
             self.shipping_address = shipping_address
             self.save()
-        
+
         return shipping_address
 
     def update_total(self):
@@ -57,6 +57,10 @@ class Order(models.Model):
 
     def complete(self):
         self.status = StatusChoice.COMPLETED
+        self.save()
+
+    def cancel(self):
+        self.status = StatusChoice.CANCELED
         self.save()
 
 def generate_order_id(sender, instance, *args, **kwargs):
