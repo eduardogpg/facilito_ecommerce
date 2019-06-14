@@ -1,5 +1,7 @@
 {% url 'carts:cart' as cart_url %}
 {% url 'shipping_addresses:shipping_addresses' as shipping_addresses %}
+{% url 'my_orders' as my_orders %}
+
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
   <a class="navbar-brand" href="{% url 'home' %}">CodigoFacilito</a>
@@ -11,6 +13,9 @@
       {% if user.is_authenticated %}
         <li class="nav-item {% if request.path == shipping_addresses %} active {% endif %}">
           <a class="nav-link" href="{{ shipping_addresses }}">Direcciones <span class="fas fa-location-arrow"></span></a>
+        </li>
+        <li class="nav-item {% if request.path == my_orders %} active {% endif %}">
+          <a class="nav-link" href="{{ my_orders }}">Pedidos <span class="fas fa-shipping-fast"></span></a>
         </li>
       {% endif %}
       <li class="nav-item {% if request.path == cart_url %} active {% endif %}">

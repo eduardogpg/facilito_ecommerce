@@ -18,7 +18,11 @@
         {% for product in cart.products.all %}
         <tr>
           <td>{{ forloop.counter }}</td>
-          <td> {% if product.image %} <img src="{{ product.image.url }}" width=60 height=60 alt=""> {% endif %}</td>
+          <td>
+            {% if product.image %}
+              <img src="{{ product.image.url }}" width=60 height=60 alt="">
+            {% endif %}
+          </td>
           <td>
             <a href="{% url 'products:product' slug=product.slug %}">{{ product.title }}</a>
             <small>
@@ -31,6 +35,7 @@
       </tbody>
     </table>
   </div>
+
   <div class="col">
     <div class="card">
       <div class="card-body">
@@ -40,8 +45,10 @@
         <div class="mt-2">
           <a class="btn btn-warning" href="{% url 'orders:order' %}" role="button">Proceder al pago</a>
         </div>
+      </div>
     </div>
   </div>
+
 {% else %}
 <div class="col">
   <p class="h3">Tu carrito de compras está vacío.</p>

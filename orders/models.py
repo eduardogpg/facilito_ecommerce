@@ -1,25 +1,38 @@
 import uuid
 import decimal
+import datetime
+
+from enum import Enum
 
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from carts.models import Cart
+from django.contrib.auth.models import User
+
 from shipping_addresses.models import ShippingAddress
 
+class StatusChoice(Enum):
+    CREATED = 'CREATED'
+    PAYED = 'PAYED'
+    COMPLETED = 'COMPLETED'
+    CANCELED = 'CANCELED'
+
+choices = [(tag, tag.value) for tag in StatusChoice]
+
 class Order(models.Model):
-    STATUS_CHOICES = (
-        ('C', 'CREATED'),
-    )
+    #related_name
+    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=100, null=False, blank=True, unique=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='c')
+    status = models.CharField(max_length=50, choices=choices, default=StatusChoice.CREATED)
     shipping_total = models.DecimalField(default=4.69, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     shipping_address = models.ForeignKey(ShippingAddress,
                                         null=True, blank=True,
                                         on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return self.order_id
@@ -31,7 +44,8 @@ class Order(models.Model):
         shipping_address = self.cart.user.shippingaddress_set.filter(default=True).first()
         if shipping_address:
             self.shipping_address = shipping_address
-
+            self.save()
+        
         return shipping_address
 
     def update_total(self):
@@ -40,6 +54,10 @@ class Order(models.Model):
 
     def calculate_total(self):
         return self.cart.total + decimal.Decimal(self.shipping_total)
+
+    def complete(self):
+        self.status = StatusChoice.COMPLETED
+        self.save()
 
 def generate_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:

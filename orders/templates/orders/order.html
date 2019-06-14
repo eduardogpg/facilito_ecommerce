@@ -8,71 +8,22 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="col-8">
   <div class="h3">Revisa tu pedido</div>
 
   <div class="card">
     <div class="card-body">
       {% for product in cart.products.all %}
-        <div class="row">
-          <div class="col-2">
-            {% if product.image %}
-              <img src="{{ product.image.url }}" width="60" height="60">
-            {% endif %}
-          </div>
-          <div class="col">
-            <div class="row">
-              <strong> <a href="{% url 'products:product' slug=product.slug%}">{{ product.title }}</a></strong>
-            </div>
-            <div class="row">
-              <strong class="text-danger">{{ product.price | price_format }}</strong>
-            </div>
-          </div>
-        </div>
-        <hr>
+        {% include 'orders/snippets/product.html' with product=product%}
       {% endfor %}
     </div>
   </div>
-
 </div>
 
 <div class="col">
-  <div class="card">
-    <div class="card-body">
-      <div class="font-weight-bold">
-        Resumen del pedido
-      </div>
-      <div class="summary">
-        <table class="table table-borderless table-sm">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Productos:</td>
-              <td>${{ cart.subtotal }}</td>
-            </tr>
-            <tr>
-              <td>Envío:</td>
-              <td>${{ order.shipping_total }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <hr>
-        <div class="font-weight-bold text-danger">
-          Total (impuestos incluidos) {{ order.total | price_format }}
-        </div>
-      </div>
-      <div class="mt-2">
-        <a class="btn btn-warning" href="{% url 'orders:billing_address' %}" role="button">Confirmar pedido</a>
-      </div>
-    </div>
-  </div>
+  {% url 'orders:address' as url %}
+  {% include 'orders/snippets/resume.html' with cart=cart order=order url=url %}
 </div>
 
 {% endblock %}

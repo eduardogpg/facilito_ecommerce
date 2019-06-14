@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from . import views
+from orders.views import OrdersListView
 from products.views import ProductListView
 
 from django.conf.urls.static import static
@@ -17,6 +18,7 @@ urlpatterns = [
     path('carrito/', include('carts.urls')),
     path('orden/', include('orders.urls')),
     path('direccion/', include('shipping_addresses.urls')),
+    path('pedidos/', OrdersListView.as_view(), name='my_orders'),
 ]
 
 if settings.DEBUG:

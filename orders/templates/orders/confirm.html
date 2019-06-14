@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load products_tag %}
+
+{% block breadcrumb %}
+<div class="mt-2">
+  {% include 'orders/snippets/breadcrumb.html' with breadcrumb=breadcrumb %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col-8">
+  <p class="h3">Confirma tu pedido</p>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+
+        <div class="col-4">
+          <div class="font-weight-bold">Dirección de envío</div>
+          <div class="card-text">{{ shipping_address.address }} </div>
+          <div class="card-text">{{ shipping_address.city_format }} </div>
+          <div class="card-text">{{ shipping_address.reference }}</div>
+          <div class="card-text">{{ shipping_address.zip }}</div>
+        </div>
+
+        <div class="col-4">
+          <div class="font-weight-bold">Método de pago</div>
+            <div class="card-text">Tarejta Terminación 1234 </div>
+            <div class="card-text text-secondary">Pago a meses no disponible </div>
+        </div>
+
+        <div class="col-4">
+          <div class="font-weight-bold">Código promociónal</div>
+          <div class="card-text">Sin codigo valido</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="products mt-3">
+    <div class="card">
+      <div class="card-body">
+        {% for product in cart.products.all %}
+          {% include 'orders/snippets/product.html' with product=product %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="col">
+  {% url 'orders:complete' as url %}
+  {% include 'orders/snippets/resume.html' with cart=cart order=order url=url %}
+</div>
+
+{% endblock%}

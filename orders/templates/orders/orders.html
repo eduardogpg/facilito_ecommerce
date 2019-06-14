@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col">
+  <div class="h3">Mis pedidos</div>
+  <hr>
+  <p class="font-weight-bold">{{ count }} {{ message_order }}</p>
+  {% for order in object_list %}
+    {% include 'orders/snippets/order.html' with order=order %}
+  {% endfor %}
+</div>
+
+{% endblock %}

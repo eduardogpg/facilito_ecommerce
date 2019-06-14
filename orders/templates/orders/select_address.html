@@ -15,7 +15,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ shipping_address.zip }}</h5>
         <p class="card-text">{{ shipping_address.address }}</p>
-        <a href="{% url 'orders:check_shipping_address' pk=shipping_address.pk %}" class="btn btn-warning">Seleccionar</a>
+        <a href="{% url 'orders:check_address' pk=shipping_address.pk %}" class="btn btn-warning">Seleccionar</a>
       </div>
     </div>
   {% endfor %}

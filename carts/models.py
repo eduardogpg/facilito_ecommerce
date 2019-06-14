@@ -1,11 +1,18 @@
 import uuid
 import decimal
+from enum import Enum
 
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, m2m_changed
 
 from products.models import Product
+
+class StatusChoice(Enum):
+    CREATED = 'CREATED'
+    CLOSED = 'CLOSED'
+
+choices = [(tag, tag.value) for tag in StatusChoice]
 
 class Cart(models.Model):
     cart_id = models.CharField(max_length=100, null=False, blank=True, unique=True)
@@ -15,6 +22,7 @@ class Cart(models.Model):
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=50, choices=choices, default=StatusChoice.CREATED)
 
     FEE = 0.05
 
@@ -38,7 +46,10 @@ class Cart(models.Model):
     def contains_products(self):
         return self.products.exists()
 
-    
+    def complete(self):
+        self.status = StatusChoice.CLOSED
+        self.save()
+
 def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
         instance.cart_id = str(uuid.uuid4())

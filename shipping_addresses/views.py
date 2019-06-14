@@ -16,6 +16,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .models import ShippingAddress
 from .forms import ShippingAddressForm
 
+from orders.utils import get_order
+
 @login_required(login_url='login')
 def create(request):
     form = ShippingAddressForm(request.POST or None)
@@ -27,8 +29,12 @@ def create(request):
         shipping_address.save()
 
         if request.GET.get('next'):
-            return HttpResponseRedirect(request.GET['next'])
+            order = get_order(request)
+            order.shipping_address = shipping_address
+            order.save()
             
+            return HttpResponseRedirect(request.GET['next'])
+
         messages.success(request, 'Dirección creada exitosamente.')
         return redirect('shipping_addresses:shipping_addresses')
 
@@ -38,15 +44,13 @@ def create(request):
 
 @login_required(login_url='login')
 def default(request, pk):
-    shipping_address = get_object_or_404(BillingProfile, pk=pk)
+    shipping_address = get_object_or_404(ShippingAddress, pk=pk)
 
     if request.user.id != shipping_address.user_id:
-        return redirect('login')
+        return redirect('carts:cart')
 
-    request.user.billingprofile_set.filter(default=True).update(default=False)
-
+    request.user.shippingaddress_set.filter(default=True).update(default=False)
     shipping_address.set_default()
-
     messages.success(request, 'Dirección principal actualizada')
 
     return redirect('shipping_addresses:shipping_addresses')
