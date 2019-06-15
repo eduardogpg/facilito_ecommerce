@@ -28,7 +28,10 @@
     <div>
       <hr>
       <div class="font-weight-bold text-danger">
-        Total (impuestos incluidos) {{ order.total | price_format }}
+        Total (impuestos incluidos) <!-- {{ order.total | price_format }} -->
+        <div class="d-inline-block" id="order-total">
+          {{ order.total | price_format }}
+        </div>
       </div>
     </div>
     <div class="mt-2">

@@ -19,6 +19,7 @@ urlpatterns = [
     path('orden/', include('orders.urls')),
     path('direccion/', include('shipping_addresses.urls')),
     path('pedidos/', OrdersListView.as_view(), name='my_orders'),
+    path('codigos/', include('promo_codes.urls')),
 ]
 
 if settings.DEBUG:

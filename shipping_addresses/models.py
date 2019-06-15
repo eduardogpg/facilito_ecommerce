@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from profiles.models import User
 
 class ShippingAddress(models.Model):
     user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
@@ -11,10 +12,14 @@ class ShippingAddress(models.Model):
     zip = models.CharField(max_length=10, null=False, blank=False)
     default = models.BooleanField(default=False)
 
+    @classmethod
+    def set_default_false(self, user):
+        ShippingAddress.objects.filter(user=user).filter(default=True).update(default=False)
+
     def set_default(self):
         self.default = True
         self.save()
-    
+
     @property
     def city_format(self):
         return '{} - {} - {}'.format(self.city, self.state, self.country)

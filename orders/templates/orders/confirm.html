@@ -25,13 +25,20 @@
 
         <div class="col-4">
           <div class="font-weight-bold">Método de pago</div>
-            <div class="card-text">Tarejta Terminación 1234 </div>
+            <div class="card-text">Tarjeta Terminación 1234 </div>
             <div class="card-text text-secondary">Pago a meses no disponible </div>
         </div>
 
         <div class="col-4">
-          <div class="font-weight-bold">Código promociónal</div>
-          <div class="card-text">Sin codigo valido</div>
+          {% with promo_code=order.promo_code %}
+            <div class="font-weight-bold">Código de promoción</div>
+            <form class="form-inline mt-1" id='promocode-form'>
+              <input type="text" name="code" value="{{ promo_code.code }}" class="form-control" {% if promo_code %} readonly {% endif %}>
+            </form>
+            <div class="{% if promo_code %}text-success{% endif %}" style="font-size:14px;" id="promo-code-success">
+              {% if promo_code %}Código aplicado exitosamente{% endif %}
+            </div>
+          {% endwith %}
         </div>
       </div>
     </div>
@@ -58,3 +65,46 @@
 </div>
 
 {% endblock%}
+
+{% block javascript %}
+
+<script type="text/javascript">
+  const form = document.getElementById('promocode-form')
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault()
+
+    const input = this.code
+    const url = '/codigos/validar?code=' + input.value
+    const error_message = 'Código no valido'
+    const success_message = 'Código aplicado exitosamente'
+
+    fetch(url)
+      .then(response => response.json() )
+      .then(response => {
+
+        const div_total = document.getElementById('order-total')
+        const div_message = document.getElementById('promo-code-success')
+
+        if(response.status === true){
+
+          div_total.innerHTML = '$' + response.total
+
+          div_message.classList.remove('text-danger')
+          div_message.classList.add('text-success')
+
+          div_message.innerHTML = success_message
+
+          input.readOnly = true;
+        }else{
+          div_message.classList.add('text-danger')
+          div_message.classList.remove('text-success')
+
+          div_message.innerHTML = error_message
+        }
+
+      })
+  });
+</script>
+
+{% endblock %}

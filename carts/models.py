@@ -3,7 +3,8 @@ import decimal
 from enum import Enum
 
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from profiles.models import User
 from django.db.models.signals import pre_save, m2m_changed
 
 from products.models import Product

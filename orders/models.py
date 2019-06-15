@@ -9,7 +9,9 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save, post_save, m2m_changed
 
 from carts.models import Cart
-from django.contrib.auth.models import User
+from profiles.models import User
+from promo_codes.models import PromoCode
+#from django.contrib.auth.models import User
 
 from shipping_addresses.models import ShippingAddress
 
@@ -30,7 +32,12 @@ class Order(models.Model):
     shipping_total = models.DecimalField(default=4.69, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     shipping_address = models.ForeignKey(ShippingAddress,
+                                            null=True, blank=True,
+                                            on_delete=models.CASCADE)
+
+    promo_code = models.OneToOneField(PromoCode,
                                         null=True, blank=True,
+                                        default=None,
                                         on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
@@ -41,7 +48,9 @@ class Order(models.Model):
         if self.shipping_address_id:
             return self.shipping_address
 
-        shipping_address = self.cart.user.shippingaddress_set.filter(default=True).first()
+        #shipping_address = self.cart.user.shippingaddress_set.filter(default=True).first()
+        shipping_address = self.cart.user.default_address
+
         if shipping_address:
             self.shipping_address = shipping_address
             self.save()
@@ -52,8 +61,14 @@ class Order(models.Model):
         self.total = self.calculate_total()
         self.save()
 
+    def get_discount(self):
+        if not self.promo_code_id:
+            return 0
+
+        return decimal.Decimal(self.promo_code.discount)
+
     def calculate_total(self):
-        return self.cart.total + decimal.Decimal(self.shipping_total)
+        return self.cart.total + decimal.Decimal(self.shipping_total) - self.get_discount()
 
     def complete(self):
         self.status = StatusChoice.COMPLETED
@@ -62,6 +77,12 @@ class Order(models.Model):
     def cancel(self):
         self.status = StatusChoice.CANCELED
         self.save()
+
+    def apply_promo_code(self, promo_code):
+        self.promo_code = promo_code
+        self.save()
+        self.update_total()
+        promo_code.use()
 
 def generate_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:

@@ -25,14 +25,14 @@ def create(request):
     if request.method == 'POST' and form.is_valid():
         shipping_address = form.save(commit=False)
         shipping_address.user = request.user
-        shipping_address.default = not request.user.shippingaddress_set.filter(default=True).exists()
+        shipping_address.default = not request.user.has_default_address
         shipping_address.save()
 
         if request.GET.get('next'):
             order = get_order(request)
             order.shipping_address = shipping_address
             order.save()
-            
+
             return HttpResponseRedirect(request.GET['next'])
 
         messages.success(request, 'Dirección creada exitosamente.')
@@ -49,7 +49,7 @@ def default(request, pk):
     if request.user.id != shipping_address.user_id:
         return redirect('carts:cart')
 
-    request.user.shippingaddress_set.filter(default=True).update(default=False)
+    ShippingAddress.set_default_false(request.user)
     shipping_address.set_default()
     messages.success(request, 'Dirección principal actualizada')
 

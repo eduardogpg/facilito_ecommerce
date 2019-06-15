@@ -33,7 +33,9 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'products',
+    'profiles',
     'categories',
+    'promo_codes',
     'shipping_addresses',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,6 +58,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'facilitocommerce.urls'
 
 LOGIN_REDIRECT_URL = '/'
+AUTH_USER_MODEL = 'profiles.User'
 
 TEMPLATES = [
     {
