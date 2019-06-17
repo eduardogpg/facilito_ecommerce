@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tu pedido ha sido enviado</title>
+
+    <style media="screen">
+      .card {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+      }
+
+      .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding: 1.25rem;
+      }
+
+      .card-text:last-child {
+        margin-bottom: 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h3>Hola {{ user.username }}</h3>
+    <div>
+      Te informamos que hemos enviado tu pedido a la dirección establecida.
+    </div>
+    <div style="margin-top:5px; margin-bottom:5px">
+      Recuerda que puedes administrar tus pedidos en <a href="{{ url }}" target="_blank">mis pedidos</a>
+    </div>
+
+      <div class="">
+        <h5 >Dirección de entrega</h5>
+
+        <div>{{ order.shipping_address.address}}</div>
+        <div>{{ order.shipping_address.city_format }}</div>
+        <div>{{ order.shipping_address.zip }}</div>
+        <div>{{ order.shipping_address.reference }}</div>
+      </div>
+  </body>
+</html>

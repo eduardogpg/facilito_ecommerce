@@ -20,6 +20,8 @@ from .utils import get_or_create_order
 from carts.utils import destroy_cart
 from carts.utils import get_or_create_car
 
+from .mail import Mail
+
 class OrdersListView(ListView):
     model = Order
     template_name = 'orders/orders.html'
@@ -129,6 +131,7 @@ def complete(request):
 
     cart.complete()
     order.complete()
+    Mail.send_complete_order_mail(order, user)
 
     destroy_cart(request)
     destroy_order(request)
