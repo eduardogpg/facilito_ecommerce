@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'profiles',
     'categories',
     'promo_codes',
+    'billing_profiles',
     'shipping_addresses',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,12 +125,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = config('USER_MAIL')
 EMAIL_HOST_PASSWORD = config('USER_MAIL_PASSWORD')
 EMAIL_USE_TLS = True
+
+STRIPE_SECRET_KEY = 'sk_test_rVtCrgQXxyvS0h150tiyVlCC00cegldpcl'
+STRIPE_PUBLIC_KEY = 'pk_test_aRWJRcGesZVsYUzhevydDjG100ErfKhRih'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

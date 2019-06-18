@@ -1,6 +1,7 @@
 {% url 'carts:cart' as cart_url %}
 {% url 'shipping_addresses:shipping_addresses' as shipping_addresses %}
 {% url 'my_orders' as my_orders %}
+{% url 'billing_profiles:new' as new_billing_profile %}
 
 
 <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
@@ -16,6 +17,9 @@
         </li>
         <li class="nav-item {% if request.path == my_orders %} active {% endif %}">
           <a class="nav-link" href="{{ my_orders }}">Pedidos <span class="fas fa-shipping-fast"></span></a>
+        </li>
+        <li class="nav-item {% if request.path == new_billing_profile %} active {% endif %}">
+          <a class="nav-link" href="{{ new_billing_profile }}">Método de pago <span class="fab fa-cc-stripe"></span></a>
         </li>
       {% endif %}
       <li class="nav-item {% if request.path == cart_url %} active {% endif %}">

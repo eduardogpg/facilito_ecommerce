@@ -9,7 +9,7 @@ urlpatterns = [
     path('cancelar', views.cancel, name='cancel'),
     path('confirmar', views.confirm, name='confirm'),
     path('completar', views.complete, name='complete'),
-    path('direccion', views.address, name='address'),
-    path('direccion/seleccionar', views.select_address, name='select_address'),
-    path('direccion/check/<int:pk>', views.check_address, name='check_address'),
+    path('direccion/envio', views.address, name='address'),
+    path('seleccionar/direccion/envio', views.select_address, name='select_address'),
+    path('establecer/direccion/envio/<int:pk>', views.check_address, name='check_address'),
 ]

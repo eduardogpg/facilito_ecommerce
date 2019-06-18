@@ -1,5 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from .models import User
 
-admin.site.register(User, UserAdmin)
+class CustomerUserAdmin(admin.ModelAdmin):
+    exclude = ('groups', 'superuser_status', 'user_permissions', )
+
+admin.site.register(User, CustomerUserAdmin)

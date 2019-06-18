@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 
 from shipping_addresses.models import ShippingAddress
 from shipping_addresses.forms import ShippingAddressForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Order
 from .models import StatusChoice
@@ -22,10 +23,11 @@ from carts.utils import get_or_create_car
 
 from .mail import Mail
 
-class OrdersListView(ListView):
+class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
+    login_url = 'login'
     template_name = 'orders/orders.html'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['count'] = context['order_list'].count()
@@ -34,7 +36,7 @@ class OrdersListView(ListView):
         return context
 
     def get_queryset(self):
-        return Order.objects.filter(status=StatusChoice.COMPLETED).filter(user_id=1).order_by('-id')
+        return Order.objects.filter(status=StatusChoice.COMPLETED).filter(user_id=self.request.user.id).order_by('-id')
 
 @login_required(login_url='login')
 def order(request):
@@ -131,7 +133,7 @@ def complete(request):
 
     cart.complete()
     order.complete()
-    Mail.send_complete_order_mail(order, user)
+    Mail.send_complete_order_mail(order, request.user)
 
     destroy_cart(request)
     destroy_order(request)

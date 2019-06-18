@@ -1,0 +1,13 @@
+from django.db import models
+from profiles.models import User
+
+class BillingProfile(models.Model):
+    user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    card_id = models.CharField(max_length=30, null=True, blank=True)
+    last4 = models.CharField(max_length=4, null=True, blank=True)
+    brand = models.CharField(max_length=10, null=True, blank=True)
+    default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}'.format(self.card_id)

@@ -14,12 +14,14 @@ urlpatterns = [
     path('usuario/login', views.login_view, name='login'),
     path('usuario/logout', views.logout_view, name='logout'),
     path('usuario/registro', views.register_view, name='register'),
+
     path('productos/', include('products.urls')),
     path('carrito/', include('carts.urls')),
     path('orden/', include('orders.urls')),
     path('direccion/', include('shipping_addresses.urls')),
     path('pedidos/', OrdersListView.as_view(), name='my_orders'),
     path('codigos/', include('promo_codes.urls')),
+    path('datos/facturacion/', include('billing_profiles.urls')),
 ]
 
 if settings.DEBUG:
