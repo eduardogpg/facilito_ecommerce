@@ -1,13 +1,24 @@
 from django.conf import settings
 from django.contrib import messages
 
+from .models import BillingProfile
 from django.shortcuts import render
 from django.shortcuts import redirect
 
 from stripeAPI.customer import create_card
 from stripeAPI.customer import create_customer
 
+from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+
+class BillingProfileListView(LoginRequiredMixin, ListView):
+    login_url = 'login'
+    model = BillingProfile
+    template_name = 'billing_profiles/billing_profile.html'
+
+    def get_queryset(self):
+        return BillingProfile.objects.filter(user=self.request.user).order_by('-default')
 
 @login_required(login_url='login')
 def new(request):

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<div class="mt-2">
+  {% include 'orders/snippets/breadcrumb.html' with breadcrumb=breadcrumb %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="col">
+  {% if billing_profile %}
+    <div class="h3">
+      Método de pago
+    </div>
+    <div class="">
+      {% include 'billing_profiles/snippets/billing_profile.html' with billing_profile=billing_profile %}
+    </div>
+    <div class="mt-3">
+      <a href="{% url 'orders:confirm' %}" class="btn btn-warning">Confirmar</a>
+    </div>
+  {% else %}
+    <div class="h3">
+      Registra tu método de pago
+    </div>
+    <div class="">
+      <a href="{% url 'billing_profiles:new' %}?next={{ next_url }}">Nuevo método de pago</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -13,6 +13,7 @@ from profiles.models import User
 from promo_codes.models import PromoCode
 #from django.contrib.auth.models import User
 
+from billing_profiles.models import BillingProfile
 from shipping_addresses.models import ShippingAddress
 
 class StatusChoice(Enum):
@@ -31,14 +32,19 @@ class Order(models.Model):
     status = models.CharField(max_length=50, choices=choices, default=StatusChoice.CREATED)
     shipping_total = models.DecimalField(default=4.69, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
-    shipping_address = models.ForeignKey(ShippingAddress,
+    shipping_address = models.ForeignKey(ShippingAddress, #Una dirección de envío puede tener muchas ordenes
                                             null=True, blank=True,
                                             on_delete=models.CASCADE)
 
-    promo_code = models.OneToOneField(PromoCode,
+    promo_code = models.OneToOneField(PromoCode, #Una promoción puede tener una orden
                                         null=True, blank=True,
                                         default=None,
                                         on_delete=models.CASCADE)
+
+    billing_profile = models.ForeignKey(BillingProfile, #Un método de pago puede tener muchas ordenes
+                                            null=True, blank=True,
+                                            on_delete=models.CASCADE)
+
     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
@@ -48,14 +54,25 @@ class Order(models.Model):
         if self.shipping_address_id:
             return self.shipping_address
 
-        #shipping_address = self.cart.user.shippingaddress_set.filter(default=True).first()
-        shipping_address = self.cart.user.default_address
+        shipping_address = self.user.default_address
 
         if shipping_address:
             self.shipping_address = shipping_address
             self.save()
 
         return shipping_address
+
+    def get_or_set_default_billing_profile(self):
+        if self.billing_profile_id:
+            return self.billing_profile
+
+        billing_profile = self.user.default_billing_profile
+
+        if billing_profile:
+            self.billing_profile = billing_profile
+            self.save()
+
+        return billing_profile
 
     def update_total(self):
         self.total = self.calculate_total()

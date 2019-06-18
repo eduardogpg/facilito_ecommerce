@@ -92,7 +92,7 @@ class ShippingAddressDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteV
         if self.get_object().default:
             return redirect('shipping_addresses:shipping_addresses')
 
-        if sef.get_object().order_set.exists():
+        if self.get_object().order:
             return redirect('shipping_addresses:shipping_addresses')
 
         return super(ShippingAddressDeleteView, self).dispatch(request, *args, **kwargs)

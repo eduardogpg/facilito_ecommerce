@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render
+from django.shortcuts import reverse
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -27,7 +28,7 @@ class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
     login_url = 'login'
     template_name = 'orders/orders.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['count'] = context['order_list'].count()
@@ -69,6 +70,8 @@ def address(request):
         'cart':cart, 'order': order,
         'shipping_address': shipping_address,
         'choose_other_address': choose_other_address,
+        'title':'Dirección de envío',
+        'next_url': reverse('orders:address'),
         'breadcrumb': breadcrumb(addres=True)
     })
 
@@ -101,6 +104,25 @@ def check_address(request, pk):
     return redirect('orders:address')
 
 @login_required(login_url='login')
+def payment(request):
+    cart = get_or_create_car(request)
+
+    if not cart.contains_products():
+        return redirect('carts:cart')
+
+    order = get_or_create_order(cart, request)
+
+    billing_profile = order.get_or_set_default_billing_profile()
+
+    return render(request, 'orders/payment.html', {
+        'cart': cart, 'order': order,
+        'billing_profile': billing_profile,
+        'title': 'Método de pago',
+        'next_url': reverse('orders:payment'),
+        'breadcrumb': breadcrumb(addres=True, payment=True)
+    })
+
+@login_required(login_url='login')
 def confirm(request):
     cart = get_or_create_car(request)
 
@@ -116,7 +138,7 @@ def confirm(request):
     return render(request, 'orders/confirm.html', {
         'order': order, 'cart': cart,
         'shipping_address': shipping_address,
-        'breadcrumb': breadcrumb(addres=True, pay=True, confirmation=True)
+        'breadcrumb': breadcrumb(addres=True, payment=True, confirmation=True)
     })
 
 @login_required(login_url='login')

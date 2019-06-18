@@ -15,13 +15,12 @@ class User(AbstractUser):
 
     @property
     def has_default_address(self):
-        return self.shippingaddress_set.filter(default=True).exists()
-
-    @property
-    def has_billing_profile(self):
-        return self.billingprofile_set.exists()
+        return self.default_address is not None
 
     @property
     def default_billing_profile(self):
-        return self.billingprofile_set.filter(default=True).exists()
-    
+        return self.billingprofile_set.filter(default=True).first()
+
+    @property
+    def has_billing_profile(self):
+        return self.default_billing_profile is not None
