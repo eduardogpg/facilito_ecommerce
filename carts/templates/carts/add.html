@@ -8,7 +8,7 @@
   {% endif %}
 </div>
 <div class="col">
-  <div class="h3 font-weight-bold text-success">1 producto agregado al carrito</div>
+  <div class="h3 font-weight-bold text-success">{{ cart_product.message }}</div>
   <div class="">
     <a href="{% url 'products:product' slug=product.slug %}" class="font-weight-bold">
       {{ product.title }}
@@ -21,7 +21,7 @@
     Subtotal del pedito <span class="text-danger">{{ cart.subtotal | price_format }}</span>
   </div>
   <div class="">
-    {{ cart.products.count }} {{ message_product }} en tu carrito
+    {{ cart.message }}
   </div>
   <div class="mt-2">
     {% include 'carts/snippets/pay.html' %}

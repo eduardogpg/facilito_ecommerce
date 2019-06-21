@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from .utils import get_or_create_car
 
+from .models import CartProducts
 from products.models import Product
 
 def cart(request):
@@ -12,19 +13,24 @@ def cart(request):
     return render(request, 'carts/cart.html', {
         'cart': cart,
         'count': count,
-        'message_product': 'productos' if count > 1 else 'producto'
     })
 
 def add(request):
     product = get_object_or_404(Product, id=request.POST.get('product_id') )
 
     cart = get_or_create_car(request)
-    cart.products.add(product)
+    # cart.products.add(product, through_defaults={
+    #     'quantity': request.POST.get('quantity', 1)
+    # })
+
+    cart_product = CartProducts.objects.create(product=product,
+                                cart=cart,
+                                quantity=request.POST.get('quantity', 1))
 
     return render(request, 'carts/add.html', {
         'cart': cart,
         'product': product,
-        'message_product': 'productos' if cart.products.count() > 1 else 'producto'
+        'cart_product': cart_product,
     })
 
 def remove(request):

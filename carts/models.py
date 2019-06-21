@@ -18,7 +18,7 @@ choices = [(tag, tag.value) for tag in StatusChoice]
 class Cart(models.Model):
     cart_id = models.CharField(max_length=100, null=False, blank=True, unique=True)
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE) #One to Many, a user could have many carts
-    products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(Product, blank=True, through='CartProducts')
     subtotal = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     created_at = models.DateTimeField(auto_now=True)
@@ -54,6 +54,21 @@ class Cart(models.Model):
     def close(self):
         self.status = StatusChoice.CLOSED
         self.save()
+
+    @property
+    def message(self):
+        count = self.products.count()
+        return '{} {} en tu carrito'.format(count, 'producto' if count == 1 else 'productos')
+
+class CartProducts(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def message(self):
+        return '{} {} agregado al carrito'.format(self.quantity, 'producto' if self.quantity == 1 else 'productos')
 
 def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
