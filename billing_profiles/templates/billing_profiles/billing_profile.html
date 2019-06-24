@@ -3,7 +3,7 @@
 {% block content %}
 <div class="col mb-5 ">
   <p class="h3">Mis métodos de pago</p>
-  <a href="{% url 'billing_profiles:new' %}">Agregra nuevo método de pago</a>
+  <a href="{% url 'billing_profiles:create' %}">Agregar nuevo método de pago</a>
 
   {% for billing_profile in object_list %}
     <div class="mt-2">

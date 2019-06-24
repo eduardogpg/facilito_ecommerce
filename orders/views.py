@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 
 from django.views.generic.list import ListView
 
+from django.db.models.query import EmptyQuerySet
+
 from shipping_addresses.models import ShippingAddress
 from shipping_addresses.forms import ShippingAddressForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,8 +16,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Order
 from .common import OrderStatus
 
-from .utils import breadcrumb
 from .utils import get_order
+from .utils import breadcrumb
 from .utils import destroy_order
 from .utils import get_or_create_order
 
@@ -24,6 +26,8 @@ from carts.utils import get_or_create_car
 
 from .mail import Mail
 
+from profiles.models import Customer
+
 class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
     login_url = 'login'
@@ -31,13 +35,16 @@ class OrdersListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['count'] = context['order_list'].count()
-        context['message_order'] = 'Pedidos' if context['count'] > 1 else 'Pedido'
+
+        customer = Customer.get_customer(self.request.user)
+        if customer:
+            context['customer'] = customer
+            context['orders_completed'] = customer.orders_completed()
 
         return context
 
     def get_queryset(self):
-        return Order.objects.filter(status=OrderStatus.COMPLETED).filter(user_id=self.request.user.id).order_by('-id')
+        return EmptyQuerySet
 
 @login_required(login_url='login')
 def order(request):
@@ -169,9 +176,9 @@ def cancel(request):
     order = get_or_create_order(cart, request)
 
     order.cancel()
-    cart.close()
+    #cart.close()
 
-    destroy_cart(request)
+    #destroy_cart(request)
     destroy_order(request)
 
     messages.error(request, 'Orden cancelada')

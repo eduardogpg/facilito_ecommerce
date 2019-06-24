@@ -4,7 +4,9 @@ import decimal
 from django.db import models
 
 from profiles.models import User #from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, m2m_changed
+from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
+from django.db.models.signals import m2m_changed
 
 from .common import choices
 from .common import CartStatus
@@ -29,6 +31,13 @@ class Cart(models.Model):
 
     def contains_products(self):
         return self.products.exists()
+
+    def update_totals(self):
+        self.update_subtotal()
+        self.update_total()
+
+        if self.order:
+            self.order.update_total()
 
     def update_subtotal(self):
         #self.subtotal = sum( [product.price for product in self.products.all()] )
@@ -84,20 +93,13 @@ def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
         instance.cart_id = str(uuid.uuid4())
 
-def calculate_subtotal(sender, instance, action, *args, **kwargs):
+def m2m_update_totals(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
-        instance.update_subtotal()
+        instance.update_totals()
 
-def calculate_total(sender, instance, action, *args, **kwargs):
-    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
-        instance.update_total()
-
-def calculate_order_total(sender, instance, action, *args, **kwargs):
-    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
-        pass
+def post_save_update_totals(sender, instance, created, *args, **kwargs):
+    instance.cart.update_totals()
 
 pre_save.connect(generate_cart_id, sender=Cart)
-#
-# m2m_changed.connect(calculate_subtotal, sender=Cart.products.through)
-# m2m_changed.connect(calculate_total, sender=Cart.products.through)
-# m2m_changed.connect(calculate_order_total, sender=Cart.products.through)
+post_save.connect(post_save_update_totals, sender=CartProducts)
+m2m_changed.connect(m2m_update_totals, sender=Cart.products.through)

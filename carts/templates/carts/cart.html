@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-{% load products_tag %}
+
+{% load cart_extras %}
+{% load product_extras %}
 
 {% block content %}
 
@@ -44,7 +46,7 @@
     <div class="card">
       <div class="card-body">
         <div class="font-weight-bold">
-          Subtotal ({{ cart.message }}): <span class="text-danger">{{ cart.subtotal | price_format }}</span>
+          Subtotal ({{ cart.total_products | quantity_format }}): <span class="text-danger">{{ cart.subtotal | price_format }}</span>
         </div>
         <div class="mt-2">
           <a class="btn btn-warning" href="{% url 'orders:order' %}" role="button">Proceder al pago</a>

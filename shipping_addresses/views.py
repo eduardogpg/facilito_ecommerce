@@ -25,7 +25,7 @@ def create(request):
     if request.method == 'POST' and form.is_valid():
         shipping_address = form.save(commit=False)
         shipping_address.user = request.user
-        shipping_address.default = not request.user.has_default_address()
+        shipping_address.default = not request.user.has_address()
         shipping_address.save()
 
         if request.GET.get('next'):

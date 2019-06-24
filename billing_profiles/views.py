@@ -21,24 +21,28 @@ class BillingProfileListView(LoginRequiredMixin, ListView):
         return BillingProfile.objects.filter(user=self.request.user).order_by('-default')
 
 @login_required(login_url='login')
-def new(request):
+def create(request):
+    if request.method == 'POST':
+        if request.POST.get('stripeToken'):
+
+            if not request.user.has_billing_profile():
+                create_customer(request.user)
+
+            billing_profile = create_card(request.user, request.POST['stripeToken'])
+
+            if billing_profile:
+                messages.success(request, 'Método de pago registrado exitosamente.')
+
+                if request.GET.get('next'):
+                    order = get_order(request)
+                    order.billing_profile = billing_profile
+                    order.save()
+
+                    return HttpResponseRedirect(request.GET['next'])
+
+        else:
+            messages.error(request, 'No es pobile completar la operación contacta con un administrador')
+
     return render(request, 'billing_profiles/new.html', {
         'stripe_key': settings.STRIPE_PUBLIC_KEY,
     })
-
-@login_required(login_url='login')
-def create(request):
-    if request.method == 'POST' and request.POST.get('stripeToken'):
-
-        if not request.user.has_billing_profile():
-            create_customer(request.user)
-
-        if create_card(request.user, request.POST['stripeToken']):
-            messages.success(request, 'Método de pago registrado exitosamente.')
-        else:
-            messages.error(request, 'Por ahora no es pobile completar la operación contacta con los administradores')
-
-    else:
-        messages.error(request, 'No es posible registrar el método de pago.')
-
-    return redirect('billing_profiles:new')

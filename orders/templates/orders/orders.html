@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
+{% load order_extras %}
 
 {% block content %}
 <div class="col">
-  <div class="h3">Mis pedidos</div>
-  <hr>
-  <p class="font-weight-bold">{{ count }} {{ message_order }}</p>
-  <div class="orders mb-5">
-    {% for order in object_list %}
+  {% if orders_completed %}
+    <div class="h3">Mis pedidos</div>
+    <p class="font-weight-bold">{{ orders_completed.count  | order_format }} </p>
+    {% for order in orders_completed %}
       {% include 'orders/snippets/order.html' with order=order %}
     {% endfor %}
-  </div>
+  {% else %}
+    <div class="h3">
+      No cuentas con ordenes completadas.
+    </div>
+  {% endif %}
 </div>
 
 {% endblock %}
