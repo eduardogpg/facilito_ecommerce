@@ -11,26 +11,30 @@
           <th scope="col"></th>
           <th scope="col"></th>
           <th scope="col"></th>
+          <th scope="col">Cantidad</th>
           <th scope="col">Precio</th>
         </tr>
       </thead>
       <tbody>
-        {% for product in cart.products.all %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>
-            {% if product.image %}
-              <img src="{{ product.image.url }}" width=60 height=60 alt="">
-            {% endif %}
-          </td>
-          <td>
-            <a href="{% url 'products:product' slug=product.slug %}">{{ product.title }}</a>
-            <small>
-              {% include 'carts/snippets/remove.html' with product=product%}
-            </small>
-          </td>
-          <td> <span class="font-weight-bold text-danger">{{ product.price | price_format }}</span></td>
-        </tr>
+        {% for pr in cart.products_related %}
+          {% with product=pr.product %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" width=60 height=60 alt="">
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'products:product' slug=product.slug %}">{{ product.title }}</a>
+                <small>
+                  {% include 'carts/snippets/remove.html' with product=product%}
+                </small>
+              </td>
+              <td>{{ pr.quantity }}</td>
+              <td> <span class="font-weight-bold text-danger">{{ product.price | price_format }}</span></td>
+              </tr>
+          {% endwith %}
         {% endfor %}
       </tbody>
     </table>

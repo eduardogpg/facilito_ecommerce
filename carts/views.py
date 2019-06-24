@@ -17,20 +17,21 @@ def cart(request):
 
 def add(request):
     product = get_object_or_404(Product, id=request.POST.get('product_id') )
+    quantity = int(request.POST.get('quantity', 1))
 
     cart = get_or_create_car(request)
     # cart.products.add(product, through_defaults={
     #     'quantity': request.POST.get('quantity', 1)
     # })
-
     cart_product = CartProducts.objects.create(product=product,
-                                cart=cart,
-                                quantity=request.POST.get('quantity', 1))
+                                                cart=cart,
+                                                quantity=quantity)
 
     return render(request, 'carts/add.html', {
         'cart': cart,
         'product': product,
         'cart_product': cart_product,
+        'quantity': quantity
     })
 
 def remove(request):

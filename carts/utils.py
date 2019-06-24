@@ -1,12 +1,12 @@
 from .models import Cart
-from .models import StatusChoice
+from .common import CartStatus
 
 def get_or_create_car(request):
     cart = None
     user = request.user if request.user.is_authenticated else None
 
     if user:
-        cart = request.user.cart_set.filter(status=StatusChoice.CREATED).first()
+        cart = request.user.cart_set.filter(status=CartStatus.CREATED).first()
 
     if cart is None:
         cart = Cart.objects.filter(cart_id=request.session.get('cart_id')).first()

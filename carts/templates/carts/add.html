@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+
+{% load carts_tag %}
 {% load products_tag %}
 
 {% block content %}
@@ -8,7 +10,7 @@
   {% endif %}
 </div>
 <div class="col">
-  <div class="h3 font-weight-bold text-success">{{ cart_product.message }}</div>
+  <div class="h3 font-weight-bold text-success">{{ quantity | quantity_add_format }} al carrito</div>
   <div class="">
     <a href="{% url 'products:product' slug=product.slug %}" class="font-weight-bold">
       {{ product.title }}
@@ -21,7 +23,7 @@
     Subtotal del pedito <span class="text-danger">{{ cart.subtotal | price_format }}</span>
   </div>
   <div class="">
-    {{ cart.message }}
+    {{ cart.total_products | quantity_format }} en tu carrito de compras
   </div>
   <div class="mt-2">
     {% include 'carts/snippets/pay.html' %}

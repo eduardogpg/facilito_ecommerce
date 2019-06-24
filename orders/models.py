@@ -2,11 +2,15 @@ import uuid
 import decimal
 import datetime
 
-from enum import Enum
+from .common import choices
+from .common import OrderStatus
 
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import pre_save, post_save, m2m_changed
+
+from django.db.models.signals import pre_save
+from django.db.models.signals import post_save
+from django.db.models.signals import m2m_changed
 
 from carts.models import Cart
 from profiles.models import User
@@ -16,20 +20,12 @@ from promo_codes.models import PromoCode
 from billing_profiles.models import BillingProfile
 from shipping_addresses.models import ShippingAddress
 
-class StatusChoice(Enum):
-    CREATED = 'CREATED'
-    PAYED = 'PAYED'
-    COMPLETED = 'COMPLETED'
-    CANCELED = 'CANCELED'
-
-choices = [(tag, tag.value) for tag in StatusChoice]
-
 class Order(models.Model):
     #related_name
     user = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=100, null=False, blank=True, unique=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=choices, default=StatusChoice.CREATED)
+    status = models.CharField(max_length=50, choices=choices, default=OrderStatus.CREATED)
     shipping_total = models.DecimalField(default=4.69, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     shipping_address = models.ForeignKey(ShippingAddress, #Una dirección de envío puede tener muchas ordenes
@@ -88,11 +84,11 @@ class Order(models.Model):
         return self.cart.total + decimal.Decimal(self.shipping_total) - self.get_discount()
 
     def complete(self):
-        self.status = StatusChoice.COMPLETED
+        self.status = OrderStatus.COMPLETED
         self.save()
 
     def cancel(self):
-        self.status = StatusChoice.CANCELED
+        self.status = OrderStatus.CANCELED
         self.save()
 
     def apply_promo_code(self, promo_code):

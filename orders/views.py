@@ -12,7 +12,7 @@ from shipping_addresses.forms import ShippingAddressForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Order
-from .models import StatusChoice
+from .common import OrderStatus
 
 from .utils import breadcrumb
 from .utils import get_order
@@ -37,7 +37,7 @@ class OrdersListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Order.objects.filter(status=StatusChoice.COMPLETED).filter(user_id=self.request.user.id).order_by('-id')
+        return Order.objects.filter(status=OrderStatus.COMPLETED).filter(user_id=self.request.user.id).order_by('-id')
 
 @login_required(login_url='login')
 def order(request):
