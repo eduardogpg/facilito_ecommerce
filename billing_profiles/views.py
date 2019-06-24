@@ -5,7 +5,7 @@ from .models import BillingProfile
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from stripeAPI.customer import create_card
+from stripeAPI.card import create_card
 from stripeAPI.customer import create_customer
 
 from django.views.generic.list import ListView

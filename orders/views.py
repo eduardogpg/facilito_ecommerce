@@ -1,3 +1,7 @@
+from .mail import Mail
+
+from django.db import transaction
+
 from django.contrib import messages
 from django.shortcuts import render
 from django.shortcuts import reverse
@@ -24,9 +28,9 @@ from .utils import get_or_create_order
 from carts.utils import destroy_cart
 from carts.utils import get_or_create_car
 
-from .mail import Mail
-
 from profiles.models import Customer
+
+from stripeAPI.charge import create_charge
 
 class OrdersListView(LoginRequiredMixin, ListView):
     model = Order
@@ -160,12 +164,13 @@ def complete(request):
     if not order.shipping_address:
         return redirect('orders:address')
 
-    cart.complete()
-    order.complete()
-    Mail.send_complete_order_mail(order, request.user)
+    with transaction.atomic():
+        cart.complete()
+        order.complete()
+        Mail.send_complete_order_mail(order, request.user)
 
-    destroy_cart(request)
-    destroy_order(request)
+        destroy_cart(request)
+        destroy_order(request)
 
     messages.success(request, 'Compra completada exitosamente.')
     return redirect('carts:cart')

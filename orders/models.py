@@ -97,6 +97,10 @@ class Order(models.Model):
         self.update_total()
         promo_code.use()
 
+    @property
+    def description(self):
+        return 'Orden de compra, total de producto(s) {}'.format(self.cart.total_products())
+
 def generate_order_id(sender, instance, *args, **kwargs):
     if not instance.order_id:
         instance.order_id = str(uuid.uuid4())

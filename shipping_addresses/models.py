@@ -4,12 +4,13 @@ from profiles.models import User
 
 class ShippingAddress(models.Model):
     user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
-    address = models.CharField(max_length=200)
+    line1 = models.CharField(max_length=200)
+    line2 = models.CharField(max_length=200, blank=True)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=50)
     country = models.CharField(max_length=50)
-    reference = models.CharField(max_length=300)
-    zip = models.CharField(max_length=10, null=False, blank=False)
+    reference = models.CharField(max_length=300, null=False, blank=False)
+    postal_code = models.CharField(max_length=10)
     default = models.BooleanField(default=False)
 
     @classmethod
@@ -25,4 +26,4 @@ class ShippingAddress(models.Model):
         return '{} - {} - {}'.format(self.city, self.state, self.country)
 
     def __str__(self):
-        return self.zip
+        return self.postal_code
