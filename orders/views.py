@@ -23,7 +23,9 @@ from .common import OrderStatus
 from .utils import get_order
 from .utils import breadcrumb
 from .utils import destroy_order
-from .utils import get_or_create_order
+
+from .decorators import validate_order
+from .decorators import validate_cart_and_order
 
 from carts.utils import destroy_cart
 from carts.utils import get_or_create_car
@@ -52,14 +54,8 @@ class OrdersListView(LoginRequiredMixin, ListView):
         return EmptyQuerySet
 
 @login_required(login_url='login')
-def order(request):
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
-
+@validate_cart_and_order
+def order(request, cart, order):
     return render(request, 'orders/order.html', {
         'cart': cart,
         'order': order,
@@ -67,14 +63,8 @@ def order(request):
     })
 
 @login_required(login_url='login')
-def address(request):
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
-
+@validate_cart_and_order
+def address(request, cart, order):
     shipping_address = order.get_or_set_default_shipping_address()
     choose_other_address = request.user.shippingaddress_set.filter(default=False).exists()
 
@@ -97,18 +87,12 @@ def select_address(request):
     })
 
 @login_required(login_url='login')
-def check_address(request, pk):
+@validate_cart_and_order
+def check_address(request, cart, order, pk):
     shipping_address = get_object_or_404(ShippingAddress, pk=pk)
 
     if request.user.id != shipping_address.user_id:
         return redirect('carts:cart')
-
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
 
     order.shipping_address = shipping_address
     order.save()
@@ -116,14 +100,8 @@ def check_address(request, pk):
     return redirect('orders:address')
 
 @login_required(login_url='login')
-def payment(request):
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
-
+@validate_cart_and_order
+def payment(request, cart, order):
     billing_profile = order.get_or_set_default_billing_profile()
 
     return render(request, 'orders/payment.html', {
@@ -135,14 +113,8 @@ def payment(request):
     })
 
 @login_required(login_url='login')
-def confirm(request):
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
-
+@validate_cart_and_order
+def confirm(request, cart, order):
     if not order.shipping_address:
         return redirect('orders:address')
 
@@ -154,17 +126,9 @@ def confirm(request):
     })
 
 @login_required(login_url='login')
-def complete(request):
-    cart = get_or_create_car(request)
-
-    if not cart.contains_products():
-        return redirect('carts:cart')
-
-    order = get_or_create_order(cart, request)
-
-    if not order.shipping_address:
-        return redirect('orders:address')
-
+@validate_cart_and_order
+@validate_order
+def complete(request, cart, order):
     charge = Charge.create_charge_by_order(order)
     if charge:
         with transaction.atomic():
@@ -179,14 +143,12 @@ def complete(request):
     return redirect('carts:cart')
 
 @login_required(login_url='login')
-def cancel(request):
-    cart = get_or_create_car(request)
-    order = get_or_create_order(cart, request)
-
+@validate_cart_and_order
+def cancel(request, cart, order):
     order.cancel()
-    #cart.close()
+    cart.close()
 
-    #destroy_cart(request)
+    destroy_cart(request)
     destroy_order(request)
 
     messages.error(request, 'Orden cancelada')
