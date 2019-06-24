@@ -50,7 +50,7 @@ class Order(models.Model):
         if self.shipping_address_id:
             return self.shipping_address
 
-        shipping_address = self.user.default_address
+        shipping_address = self.user.shipping_address
 
         if shipping_address:
             self.shipping_address = shipping_address
@@ -62,7 +62,7 @@ class Order(models.Model):
         if self.billing_profile_id:
             return self.billing_profile
 
-        billing_profile = self.user.default_billing_profile
+        billing_profile = self.user.billing_profile
 
         if billing_profile:
             self.billing_profile = billing_profile

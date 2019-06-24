@@ -23,9 +23,9 @@ def add(request):
     # cart.products.add(product, through_defaults={
     #     'quantity': request.POST.get('quantity', 1)
     # })
-    cart_product = CartProducts.objects.create(product=product,
-                                                cart=cart,
-                                                quantity=quantity)
+    cart_product = CartProducts.objects.create_or_update_quantity(product=product,
+                                                                    cart=cart,
+                                                                    quantity=quantity)
 
     return render(request, 'carts/add.html', {
         'cart': cart,

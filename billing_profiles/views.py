@@ -30,7 +30,7 @@ def new(request):
 def create(request):
     if request.method == 'POST' and request.POST.get('stripeToken'):
 
-        if not request.user.has_billing_profile:
+        if not request.user.has_billing_profile():
             create_customer(request.user)
 
         if create_card(request.user, request.POST['stripeToken']):

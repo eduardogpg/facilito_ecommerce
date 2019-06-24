@@ -57,11 +57,28 @@ class Cart(models.Model):
     def order(self):
         return self.order_set.filter(status=OrderStatus.CREATED).first()
 
+class CartProductsManager(models.Manager):
+
+    def create_or_update_quantity(self, product, cart, quantity=1):
+        object, created = self.get_or_create(product=product, cart=cart)
+
+        if not created:
+            quantity = object.quantity + quantity
+
+        object.update_quantity(quantity)
+        return object
+
 class CartProducts(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now=True)
+
+    objects = CartProductsManager()
+
+    def update_quantity(self, quantity=1):
+        self.quantity = quantity
+        self.save()
 
 def generate_cart_id(sender, instance, *args, **kwargs):
     if not instance.cart_id:
