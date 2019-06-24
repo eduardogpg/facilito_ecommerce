@@ -28,6 +28,7 @@ from .utils import get_or_create_order
 from carts.utils import destroy_cart
 from carts.utils import get_or_create_car
 
+from charges.models import Charge
 from profiles.models import Customer
 
 from stripeAPI.charge import create_charge
@@ -164,13 +165,15 @@ def complete(request):
     if not order.shipping_address:
         return redirect('orders:address')
 
-    with transaction.atomic():
-        cart.complete()
-        order.complete()
-        Mail.send_complete_order_mail(order, request.user)
+    charge = Charge.create_charge_by_order(order)
+    if charge:
+        with transaction.atomic():
+            cart.complete()
+            order.complete()
+            Mail.send_complete_order_mail(order, request.user)
 
-        destroy_cart(request)
-        destroy_order(request)
+            destroy_cart(request)
+            destroy_order(request)
 
     messages.success(request, 'Compra completada exitosamente.')
     return redirect('carts:cart')

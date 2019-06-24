@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from stripeAPI.customer import create_customer
 from django.contrib.auth.models import AbstractUser
 
 from orders.common import OrderStatus
@@ -20,11 +21,23 @@ class User(AbstractUser):
     def billing_profile(self):
         return self.billingprofile_set.filter(default=True).first()
 
+    @property
+    def description(self):
+        return 'Customer for {}'.format(self.email)
+
     def has_address(self):
         return self.shipping_address is not None
 
     def has_billing_profile(self):
         return self.billing_profile is not None
+
+    def create_customer_id(self):
+        if not self.customer_id:
+            customer = create_customer(self)
+            self.customer_id = customer.id
+            self.save()
+
+        return self.customer_id
 
 class Customer(User):
     class Meta:
@@ -39,7 +52,7 @@ class Customer(User):
     def get_customer(self, user):
         if Customer.is_customer(user):
             return Customer.objects.get(pk=user.pk)
-        
+
     def orders_completed(self):
         return self.order_set.filter(status=OrderStatus.COMPLETED).order_by('id')
 

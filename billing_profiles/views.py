@@ -5,9 +5,6 @@ from .models import BillingProfile
 from django.shortcuts import render
 from django.shortcuts import redirect
 
-from stripeAPI.card import create_card
-from stripeAPI.customer import create_customer
-
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -26,10 +23,10 @@ def create(request):
         if request.POST.get('stripeToken'):
 
             if not request.user.has_billing_profile():
-                create_customer(request.user)
+                request.user.create_customer_id()
 
-            billing_profile = create_card(request.user, request.POST['stripeToken'])
-
+            billing_profile = BillingProfile.create_by_stripe_token(request.user, request.POST['stripeToken'])
+            
             if billing_profile:
                 messages.success(request, 'Método de pago registrado exitosamente.')
 

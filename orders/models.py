@@ -87,6 +87,10 @@ class Order(models.Model):
         self.status = OrderStatus.COMPLETED
         self.save()
 
+    def payed(self):
+        self.status = OrderStatus.PAYED
+        self.save()
+
     def cancel(self):
         self.status = OrderStatus.CANCELED
         self.save()
